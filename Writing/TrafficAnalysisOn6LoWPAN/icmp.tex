@@ -1,0 +1,106 @@
+\section{Extract ICMP Messages}\label{ICMPAttack}
+%What is ICMP?
+ICMP messages are used for network maintenance.  Their typical usage include update routing information, network debugging, etc. Further details of ICMP messages are specified in \cite{rfc4443}.
+
+%ICMP in Contiki?
+As of the latest Contiki release 3.0, neither IPSec\cite{rfc4301} nor Secure ICMP Messages, i.e. ICMP Messages with encryption and authentication, are implemented; thus leaving 802.15.4 Security the only option for encrypting ICMP messages.
+
+%Why ICMP matters?
+Due to the nature of OSI layered model\cite{OSI}, ICMP messages are independent to upper layer applications; thus they hardly contain any information of the application data. Yet from a security perspective, leakage of ICMP messages may still endanger the network. For example, the identity of root node could guide a Denial of Service attack to amplify its damage, and being able filter some specific ICMP messages could be exploited to conduct other attacks such as the Wormhole attacks\cite{Wormhole}, etc.
+
+%Observable ICMP messages in practice
+We simulated a 6LoWPAN network constituted of multiple Wismote\cite{Wismote} nodes running Contiki broadcast and unicast examples, with 802.15.4 Security set to the highest level (CCM* with 128 bit MIC). The ICMP messages generated in our simulation includes:
+\begin{itemize}
+	\item \textbf{DAG Information Object (DIO)} \\
+	DIO contains the 6LoWPAN global information. It could be periodically broadcasted for network maintenance, or unicasted to a new joining node as a reply to DIS (see below).
+	\item \textbf{DAG Information Solicitation (DIS)} \\
+	DIS is sent by a new started node to probe any existing 6LoWPANs. A DIO would be replied if the DIS is received by any neighbour nodes.
+	\item \textbf{Destination Advertisement Object (DAO)} \\
+	DAO is sent by a child node to its precedents\footnote{The 6LoWPAN DODAG topology is defined in \cite{rfc6550}.} to propagate its routing information.
+	\item \textbf{Neighbour Solicitation (NS) and Neighbour Advertisement (NA)} \\
+	NS and NA are the ARP replacement in IPv6, where NS queries a translation and NA answers one. In addition, they are also used for local link validity check.
+	\item \textbf{Echo Request and Echo Response (PING)} \\
+	Echo Request and Echo Response are well known as the PING packets. They are mostly used for diagnostic purposes, such as connectivity test or Round Trip Time (RTT) estimation. Echo Request may contain arbitrary user defined data and Echo Response simply echoes its corresponding request.
+\end{itemize}
+
+DIO/DIS/DAO and NS/NA are defined by \cite{rfc6550} and \cite{rfc6775} respectively. PING is defined by \cite{rfc2463}.
+
+%Packet features
+Our simulation shows that even though the exact content of these messages are hidden under the encryption provided by 802.15.4 Security, some of them are still distinguishable simply by their packet size and type of MAC destination. We summarise these features in \Cref{ICMPPacketFeature} where $x$ is the size of user defined data in PING packets.
+
+Considering the fact that UDP is the relatively preferable Transportation Layer protocol in IoT applications than TCP, we also attached the packet features of UDP multicast and unicast at the bottom of \Cref{ICMPPacketFeature}.
+
+There are two points may worth be noticed for \Cref{ICMPPacketFeature}:
+\begin{itemize}
+	\item Both DIO and NS can be sent in either broadcast or unicast. The broadcasted DIO is smaller than unicasted as it uses an abbreviated IPv6 multicast address ``ff02::1a''. Broadcasted NS uses another multicast address ``ff02::1:ff00:0'' which has the same length as unicast. However, both of them are mapped to the same ``0xffff'' Link Layer broadcast address in 802.15.4 MAC Header.
+	%ICMP ECHO fragmentation in Wismote network.
+	\item The size of PING may vary due to different user defined data. According to \cite{rfc4944}, any packet less than the 802.15.4 MTU, i.e. 127 bytes, should not be fragmented; however, we realised that Contiki fragments PING larger than $107$ bytes. We have not identified the cause but we consider this might be an implementation bug.
+	%No NS and NA in Sky network.
+	%\item Different ICMPv6 messages maybe observed on different platforms. In our experiments, there is no NS and therefore NA observed in WSN built with TelosB.
+\end{itemize}
+
+\begin{table}[ht!]
+	\center
+	\adjustbox{max width = \textwidth}
+	{
+		\begin{tabular}{|c|c|c|}
+			\hline
+			       & Packet Size (bytes) & Type of MAC Destination \\ \hline
+			DIS    & 85                  & broadcast                       \\ \hline
+			DIO  & 118/123                 & broadcast/unicast                       \\ \hline
+			DAO    & 97                  & unicast                      \\ \hline
+			NS & 87                  & broadcast/unicast                       \\ \hline
+			NA     & 87                  & unicast                      \\ \hline
+			PING   & $101+x$               & unicast                      \\ \hline
+			UDP Multicast   & $85+x$                  & broadcast               \\ \hline
+			UDP Unicast   & $107+x$                  & unicast                       \\ \hline
+		\end{tabular}
+	}
+	\caption{ICMPv6 Packets in Simulated 6LoWPAN with noncoresec, where $x$ is size of user defined data}
+	\label{ICMPPacketFeature}
+\end{table}
+
+%%UDP packet size.
+%In practice, the captured traffic contains noises from upper layer applications. In case of the generally used UDP\cite{rfc768}, the packet features are summarised in \Cref{UDPPacketFeature}.
+%
+%\begin{table}[ht!]
+%	\center
+%	\adjustbox{max width = \textwidth}
+%	{
+%		\begin{tabular}{|c|c|c|}
+%			\hline
+%			       & Packet Size (bytes) & Type of MAC Destination \\ \hline
+%			UDP Multicast   & $85+x$                  & broadcast                       \\ \hline
+%			UDP Unicast   & $107+x$                  & unicast                       \\ \hline
+%		\end{tabular}
+%	}
+%	\caption{UDP Packets in Simulated 6LoWPAN with noncoresec, where $x$ is size of user defined data}
+%	\label{UDPPacketFeature}
+%\end{table}
+
+Observing \Cref{ICMPPacketFeature}, we realised 5 among the ICMP messages can be distinguished from all other packets, as summarised in \Cref{TAICMP}.
+
+\begin{table}[ht!]
+	\center
+	\adjustbox{max width = \textwidth}
+	{
+		\begin{tabular}{|c|c|c|}
+			\hline
+			 & (Size, MAC Destination)\\ \hline
+			DIS   & (85, broadcast)                       \\ \hline
+			DAO   & (97, unicast)                       \\ \hline
+			NS (broadcast)   & (87, broadcast)                       \\ \hline	
+			NS (unicast)   & (87, unicast)                       \\ \hline
+			NA 	& (87, unicast)                       \\ \hline
+		\end{tabular}
+	}
+	\caption{Distinctive ICMP Packets}
+	\label{TAICMP}
+\end{table}
+
+Other packets in \Cref{ICMPPacketFeature} may still be distinguishable in the encrypted traffic, unless the upper application happens to generate packets with the exact features. 
+
+Packet fragmentation may be a major factor that induces false result when applying this method. However it is likely to be avoided by most applications.
+
+%\subsection{Tracking Root Node}
+%\textbf{TO BE DONE...}

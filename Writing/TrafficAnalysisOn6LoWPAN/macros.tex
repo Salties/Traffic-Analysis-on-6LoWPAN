@@ -1,0 +1,17 @@
+\newcommand{\AddFigure}[3]
+{
+	\begin{figure}[ht!]
+		\center
+		\includegraphics[width=\linewidth]{#1}
+		\caption{#2}
+		\label{#3}
+	\end{figure}
+}
+
+\newcommand{\AddCode}[3]
+{
+	\lstinputlisting[captionpos=b, caption=#2, breaklines=true,label=#3]{#1}
+}
+
+\theoremstyle{definition}
+\newtheorem{example}{Example}

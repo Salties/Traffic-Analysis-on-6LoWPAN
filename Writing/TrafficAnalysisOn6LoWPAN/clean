@@ -1,0 +1,3 @@
+#!/bin/bash
+
+rm -f *.toc *.pdf *.log *.out *.aux *.bbl *.synctex.gz *.blg
