@@ -1,22 +1,5 @@
 \section{Introduction}
-Traffic Analysis is a well studied technique that breaches data confidentiality over Internet which exploits the side channel information, such as packet length and timing, to reveal contents in the encrypted traffic. As a matter of fact, Traffic Analysis techniques is often associated with malicious Internet behaviour such as privacy violation and mass surveillance. 
-
-%typically targeting protocols including HTTPS\cite{rfc2818} and SSL\cite{rfc6101}/TLS\cite{rfc5246}. This type of attacks works by correlating the encrypted contents to side channel information frequently omitted by cryptographic scheme designs, such as packet length, timing and any other unprotected meta data. Consequently, TA is often associated to Internet privacy violation and Mass Surveillance.
-
-On the other hand, the development of Internet of Things (IoT) has linked ever more private data to the network, with radio being the most extensively used media for data transmission. These factors combined made Traffic Analysis posing even greater threat in the IoT context, as data are made widely open yet its content are juicier than ever.
-
-%The extensive use of radio communication in exposed environment poses a great security challenge to IoT applications, especially against TA attacks as packets containing critical privacy data, e.g. driving information in Vehicular Ad Hoc Networks(VANETs)\cite{VANET} and daily life data in a smart house, can be easily eavesdropped and analysed by adversaries.
-
-In this paper, we revised the applicability of Traffic Analysis in IoT applications by demonstrating simple examples capturing the concept. We made extensive use of Contiki OS\cite{Contiki} in our experiments to build demo applications. A 6LoWPAN\cite{rfc4944} network is built on two models of typical devices, namely TelosB\cite{TelosB} and CC2538\cite{CC2538}, as well as a network constructed by simulated Wismote\cite{Wismote}. 
-
-%Finally the paper structure
-The paper is structured as follows. We first review the related literatures in \Cref{RelatedWork} and briefly report a security flaw in Contiki source code in \Cref{noncoresec}. We then present the first example that extracts ICMP\footnote{Specifically, the term ICMP we used in this paper refers to ICMPv6.}\cite{rfc4443} messages in \Cref{ICMPAttack}, followed by another example that reveals hardware information in \Cref{Sec:DistinguishDevice}. \Cref{PingProbe} proposes a new type of side channel attack, we named PingProbe, that fingerprints the application running on an IoT node. Finally we conclude the paper in \Cref{conclusion}.
-
-\section{Related Work \label{RelatedWork}}
-%Literatures about Traffic Analysis...
-Traffic Analysis is a well studied subject in the Internet security and privacy community. \cite{WebSidechannel} summarised several scenario of side channel attacks against web applications, followed by \cite{PinpointWeb} which proposes the use of Mutual Information to pinpoint the potential points of information leakage. \cite{AppleMsg}, \cite{Language} and \cite{VideoTraffic} described attacks against encrypted text, voice and video traffic respectively, while \cite{SuggestBox} instantiated an attack against Google search box. \cite{HClassifier} and \cite{Peekaboo} studied different classifiers when adopting Machine Learning in Traffic Analysis. Different countermeasures are studied by \cite{TrafficMorphing}, \cite{HTTPOS} and \cite{FTE}.
-
-%Literatures about 6LoWPAN security
-With respect to 6LoWPAN security issues, \cite{6LoWPANAtk} summarises the known attacks in 6LoWPAN networks, including Fragmentation Attack\cite{FragAtk}, Sinkhole Attack\cite{Sinkhole}, Hello Flood Attack\cite{HelloFlood}, Wormhole Attack\cite{Wormhole} and Blackhole Attack\cite{Blackhole}. In addition, \cite{802154SecIssues} reported certain problematic designs in 802.15.4 security\cite{802154}.
-
-%To our knowledge, this is the first proposal of such type of our fingerprint attack in \Cref{PingProbe}.
+\begin{itemize}
+	\item Motivation
+	\item Related Work
+\end{itemize}
