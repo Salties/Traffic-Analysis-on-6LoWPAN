@@ -4,5 +4,5 @@
 *.log
 *.out
 *.pdf
-*.syntex.gz
+*.synctex.gz
 *.swp
