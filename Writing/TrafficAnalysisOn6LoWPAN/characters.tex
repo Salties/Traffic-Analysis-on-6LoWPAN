@@ -1,21 +1,27 @@
 \section{Characteristics of Sensor Network Traffics}
 
-Due to the difference ecology of sensor network comparing to the Internet, the traffic data possesses several significant characteristics:
+Due to the chracteristic ecology, traffic data in sensor networks need to be considered differently comparing to Internet.
 
-\begin{itemize}
-	\item Different protocol suites are proposed for sensor networks where different choices result into different traffic meta data. For example, when using ContikiMAC\cite{ContikiMAC} by default in the Contiki OS, the traffic meta data is very similar to those we have for the Internet, but in case of TSCH\cite{rfc7554} there will be additional channel information. 
-	\item Unlike the dominant usage of TLS/SSL over Internet, encryption is considered on different layers for sensor networks, which affects the information that an eavesdropping adversary can learn. For instance the IPv6 header is public under DTLS\cite{rfc6347} but is hidden under 802.15.4 Security\cite{802154}.
-	\item Unreliable transmission is more preferable than reliable transmission on constrained devices. Specifically by replacing TCP with UDP, the channel loses features such as Acknowledgements(ACKs), Dynamic Window, etc, which increases the entropy in traffic meta data. Detection of plaintext signal would be eased without such features.
-	\item "Random" data, such as ads, does not exist in sensor networks. The random data naturally adds more noises to the signal of plaintext and hence served a countermeasure against traffic analysis attacks. Without such noises, signals of plaintext would be more easily detected.
-	%\item Real time applications; hence less noise in timing.
-\end{itemize}
 
-Therefore more predictable packet features.
+First of all, various protocol suites are proposed for sensor networks for different application. The choice of different protocols results into different traffic meta data. For example, when using ContikiMAC\cite{ContikiMAC} (default in Contiki OS), the traffic meta data is similar to those we have for the Internet, whereas for TSCH\cite{rfc7554} there will be additional channel information. 
+	
+Secondly, unlike the dominant usage of TLS/SSL over Internet, encryption is considered on different layers for sensor networks, which also affects the information for an eavesdropping adversary. For instance the IPv6 header is visible for DTLS\cite{rfc6347} but is hidden when using 802.15.4 Security\cite{802154}.
 
-\begin{itemize}
-	\item Different approaches: sophisticated techniques may not even required, e.g. machine learning, Mutual Information analysis. Leakage is easily observed.
-\end{itemize}
+Also that unreliable transmission is more preferable than reliable transmission for the constrained devices. This implies that, like UDP comparing to TCP, there might be no flow control which dynamically reassembles data into multiple packets. As a result, the actual size of data can be accurately observed from the packet size, which could provide more information to the adversary.
 
-Different scenarios have different leakages, e.g. the channels used in  TSCH could also be a leakage source.
+The absence of "random" data, such as ads, is another factor. The random data naturally randomises the traffic and hence served a countermeasure against the attacks. The leakage would be more easily observed without these noise.
 
-Existing security protocols does not protect these side channel information.
+%Real time applications; hence less noise in timing.
+In aspect of packet timings, the constrained devices have extremely limited processor frequency and their system entropies are also relatively lower; therefore the correlation between response latency and code execution time would be stronger than those of Internet servers.
+
+%More targets in addition to encrypted contents.
+ 
+%Therefore more predictable packet features.
+
+%\begin{itemize}
+%	\item Different approaches: sophisticated techniques may not even required, e.g. machine learning, Mutual Information analysis. Leakage is easily observed.
+%\end{itemize}
+
+%Different scenarios have different leakages, e.g. the channels used in  TSCH could also be a leakage source.
+
+%Existing security protocols does not protect these side channel information.
