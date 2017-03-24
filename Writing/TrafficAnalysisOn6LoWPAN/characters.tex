@@ -3,7 +3,7 @@
 Sensor network traffic has several different points comparing to Internet traffic.
 
 Various protocol stacks are proposed for different applications, some of them compete to each other. Different protocol generates different traffic meta data. For example, when using ContikiMAC\cite{ContikiMAC}\footnote{Default by Contiki OS.}, the types of traffic meta data is basically the same as of Internet; whereas for TSCH\cite{rfc7554} there will be additional channel information. 
-	
+		
 Unlike the dominant usage of TLS/SSL over Internet, encryption could be applied on different layers of the protocol stack. Information the adversary has access to is therefore differs for each setting. For instance, the IPv6 header is visible under DTLS\cite{rfc6347} but is hidden under 802.15.4 Security\cite{802154}.
 
 Unreliable transmission is preferable than reliable one due to the constrained resources. This implies that there might be no flow control which dynamically reassembles data into multiple packets, for example comparing UDP to TCP. Without the reassembling, number of packets is constant and the actual size of data can be accurately observed from the packet size, which could provide more information to the adversary. Although packet fragmentation is also provided by IPv6 but this feature is usually disabled for various reasons.

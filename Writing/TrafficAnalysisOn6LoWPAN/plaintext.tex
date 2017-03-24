@@ -1,12 +1,45 @@
-\section{Leakage on Plaintext}
+\section{Leakage on Encrypted Contents}
 
-Examples.
+A primary target of traffic analysis attacks is the plaintext in the encrypted contents. These attacks normally requires the adversary to have the pre-knowledge of a finite set of the potential plaintext; therefore each attack is strongly dependent to a specific application.
 
-\subsection{ICMP}
+However, as of this study, it would be inappropriate to make further assumptions about the data being transmitted due to the variety of sensor network applications. Without loss of generality, in this section we demonstrate the concept of attack through two examples. The first targets the standardised ICMP\cite{rfc4443} messages and the second aims to distinguish some market available devices.
 
-Types of ICMP messages can be distinguished by looking at the destination and/or source address together with packet length.
+\subsection{ICMP Leakage}
 
-Knowing the ICMP messages may reveal information of the network topology.
+Internet Control Message Protocol (ICMP) performs the management tasks in the network, such as connection establishment and routing information exchange. Contiki OS supports the following ICMP messages:
+
+\begin{itemize}
+	\item \textbf{DAG Information Object (DIO)} \\
+	DIO contains the 6LoWPAN global information. It could be periodically broadcasted for network maintenance, or unicasted to a new joining node as a reply to DIS (see below).
+	\item \textbf{DAG Information Solicitation (DIS)} \\
+	DIS is sent by a newly started node to probe any existing 6LoWPANs. A DIO would be replied if the DIS is received by any neighbour nodes.
+	\item \textbf{Destination Advertisement Object (DAO)} \\
+	DAO is sent by a child node to its precedents\footnote{The 6LoWPAN DODAG topology is defined in \cite{rfc6550}.} to propagate its routing information.
+	\item \textbf{Neighbour Solicitation (NS) and Neighbour Advertisement (NA)} \\
+	NS and NA are the ARP replacement in IPv6, where NS queries a translation and NA answers one. In addition, they are also used for local link validity check.
+	\item \textbf{Echo Request and Echo Response (PING)} \\
+	Echo Request and Echo Response are well known as the PING packets. They are mostly used for diagnostic purposes, such as connectivity test or Round Trip Time (RTT) estimation. Echo Request may contain arbitrary user defined data and Echo Response simply echoes its corresponding request.
+\end{itemize}
+
+Generally, ICMP messages can be protected by either using the optional secure ICMP messages instead or relying on lower layer encryption. Since Contiki OS does not have the former implemented, the 802.15.4 Security became the only option to protect the ICMP messages.
+
+Although leakage in ICMP messages does not directly lead to any leakage of application data, it would still provide the adversary with information such as the topology of network which could then be exploited to launch other attacks.
+
+We simulated a 6LoWPAN network with 802.15.4 Security enabled\footnote{Security level is set to the highest 0x07.}. In addition to ICMP messages, the nodes also generate some UDP packets with random data. We noticed that several ICMP messages can be identified simply by looking at the combination of packet size and the type of MAC Destination. We summarised the packet features in \Cref{IcmpPacketFeature}. We use $x$ to denote the size of user defined data in bytes.
+
+\begin{table}
+	\center
+	\input{tbl/icmpmeta.tex}
+	\caption{6LoWPAN Packet Features\label{IcmpPacketFeature}}
+\end{table}
+
+The first thing we noticed is that DIS is the smallest packet which has an unique 85 bytes. It means that it can be identified simply by the packet size.
+
+We also noticed that unicast packets can also be easily identified. Since PING and UDP unicast packets have at least 101 and 108 bytes\footnote{PING can be sent without user defined data and UDP packets requires at least 1 byte.}, DAO can be uniquely identified by unicast packets of size $97$ bytes. For the same reason NA and NS can also be distinguished from other packets by filtering unicast packets of $87$ bytes. Considering NA is always sent as a response to NS, one can always identify the first packet being NS and the second NA. The similar strategy can also be applied on identifying unicast  DIO by associating with the previous DIS, although DIO is potentially obfuscated by carefully crafted PING or UDP packets.
+
+Even though broadcast packets other than DIS could also be obfuscated by carefully crafted user defined data, information might still leak through jointly inspecting the packets. Broadcast NS can be identified by the followed characteristic NA response; packets of 118 bytes that being periodically broadcasted are likely to be DIOs.
+%Types of ICMP messages can be distinguished by looking at the destination and/or source address together with packet length.
+%Knowing the ICMP messages may reveal information of the network topology.
 
 
 \subsection{Sensor Readings with CoAP}
