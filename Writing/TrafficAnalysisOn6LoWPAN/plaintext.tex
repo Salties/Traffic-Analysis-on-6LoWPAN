@@ -2,11 +2,11 @@
 
 A primary target of traffic analysis attacks is the plaintext in the encrypted contents. These attacks normally requires the adversary to have the pre-knowledge of a finite set of the potential plaintext; therefore each attack is strongly dependent to a specific application.
 
-However, as of this study, it would be inappropriate to make further assumptions about the data being transmitted due to the variety of sensor network applications. Without loss of generality, in this section we demonstrate the concept of attack through two examples. The first targets the standardised ICMP\cite{rfc4443} messages and the second aims to distinguish some market available devices.
+However, as of this study, it would be inappropriate to make further assumptions about the data being transmitted due to the variety of sensor network applications. Without loss of generality, in this section we demonstrate the concept of attacks through two examples.
 
-\subsection{ICMP Leakage}
+\paragraph{Example 1: Types ICMP Messages}
 
-Internet Control Message Protocol (ICMP) performs the management tasks in the network, such as connection establishment and routing information exchange. Contiki OS supports the following ICMP messages:
+Internet Control Message Protocol(ICMP)\cite{rfc4443} performs the management tasks in the network, such as connection establishment and routing information exchange. Contiki OS supports the following ICMP messages:
 
 \begin{itemize}
 	\item \textbf{DAG Information Object (DIO)} \\
@@ -33,15 +33,28 @@ We simulated a 6LoWPAN network with 802.15.4 Security enabled\footnote{Security 
 	\caption{6LoWPAN Packet Features\label{IcmpPacketFeature}}
 \end{table}
 
-The first thing we noticed is that DIS is the smallest packet which has an unique 85 bytes. It means that it can be identified simply by the packet size.
+The first thing we noticed is that DIS is the smallest packet which has an unique 85 bytes; hence it can be simply identified by the packet size.
 
-We also noticed that unicast packets can also be easily identified. Since PING and UDP unicast packets have at least 101 and 108 bytes\footnote{PING can be sent without user defined data and UDP packets requires at least 1 byte.}, DAO can be uniquely identified by unicast packets of size $97$ bytes. For the same reason NA and NS can also be distinguished from other packets by filtering unicast packets of $87$ bytes. Considering NA is always sent as a response to NS, one can always identify the first packet being NS and the second NA. The similar strategy can also be applied on identifying unicast  DIO by associating with the previous DIS, although DIO is potentially obfuscated by carefully crafted PING or UDP packets.
+We also noticed that most of the unicast packets can also be identified. Since PING and UDP unicast packets have at least 101 and 108 bytes\footnote{PING can be sent without user defined data and UDP packets requires at least 1 byte.}, DAO can be uniquely identified by unicast packets of size $97$ bytes. For the same reason NA and NS can also be distinguished from other packets by filtering unicast packets of $87$ bytes. Considering NA is always sent as a response to NS, one can always identify the first packet being NS and the second NA. The similar strategy can also be applied on identifying unicast DIO as it is triggered by DIS, which can be unambiguously identified, as a response. However, unicast DIO could still be obfuscated by carefully crafted PING or UDP packets. PING is also likely to be recognised by its pair-wised appearance, as the echoed PING response would have nearly the same meta data as the original request.
 
-Even though broadcast packets other than DIS could also be obfuscated by carefully crafted user defined data, information might still leak through jointly inspecting the packets. Broadcast NS can be identified by the followed characteristic NA response; packets of 118 bytes that being periodically broadcasted are likely to be DIOs.
+Broadcast packets other than DIS are relatively obfuscated due to user defined data, but some of them might still be identified by inspecting multiple packets. For instance, broadcast NS can be identified by the followed characteristic NA response; packets of 118 bytes those are periodically broadcasted are likely to be DIOs.
 %Types of ICMP messages can be distinguished by looking at the destination and/or source address together with packet length.
 %Knowing the ICMP messages may reveal information of the network topology.
 
+\paragraph{Example 2: Sensor Readings with CoAP}
+%Reading different sensors results into different responding time which can be observed through the packets.
+CoAP\cite{rfc7252} is a protocol designed for constraied devices that provides an universal interface for accessing resources. Our second example demonstrates a realistic case where a node with multiple sensors using CoAP\cite{rfc7252} to provide the measurements.
 
-\subsection{Sensor Readings with CoAP}
+CC2538 is the platform for our experiments. We combined the code in er-rest-example and cc2538-demo of Contiki OS to implement the sensor node. Three resources are implemented, namely are Vdd, temperature and Ambient Light Sensor (ALS).
 
-Reading different sensors results into different responding time which can be observed through the packets.
+Our experiments showed that ALS readings can be distinguished from others by inspecting the response latency, despite the fact that we have carefully crafted any other traffic meta data, including URIs and data representations, to be uniform.
+
+\begin{table}
+	\center
+	\input{tbl/coapsensors.tex}
+	\caption{CoAP Response Latency for Sensor Readings on CC2538\label{CoapTiming}}
+\end{table}
+
+Our data is summarised in \Cref{CoapTiming}. Vdd and temperature readings take roughly the same amount of time. However, ALS readings take nearly $2$ms longer and hence can be easily distinguished.
+
+To summarise, the above examples confirmed the applicability of classic traffic analysis attacks in case sensor networks. The leakages are significant enough to be observed without utilising any sophisticated analytical tools.
