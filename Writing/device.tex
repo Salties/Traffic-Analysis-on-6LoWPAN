@@ -1,9 +1,18 @@
 \section{Leakage on Device Information}
 
-Different processors result into different response time to the same message; hence the response time can be correlated to the MCU.
+%Different processors result into different response time to the same message; hence the response time can be correlated to the MCU.
 
-\begin{itemize}
-	\item PING is a ideal feature in ICMP to launch this attack.
-\end{itemize}
+Hardware information is generally not considered to be an interested target in Internet traffic analysis attacks. However, in case of sensor network, such 
+information could be valuable. For example, hardware information might be exploited to identify devices with specific vulnerabilities, or to be used as an indicative information for other attacks.
 
-The processor can be considered a hint for the adversary to find out the model of target device.
+Although packets are generally considered to be hardware independent, there are still ways the hardware information could leak. An obvious example is that, when default MAC address is used, one can be immediately look up the manufacturer of using the Burned-In Address (BIA)\cite{BIA}.
+
+Different driver implementations is also a factor. Among the platforms we tested, we realised that TelosB\cite{TelosB} discards all packets exceeding 127 bytes\footnote{MTU specified by 802.15.4 standard.}, whereas CC2538 is capable of handling packets even up to 160 bytes; therefore an adversary can immediately rule out TelosB if she/he sees a packet larger than 127 bytes.
+
+%Now it comes to PING.
+
+%\begin{itemize}
+%	\item PING is a ideal feature in ICMP to launch this attack.
+%\end{itemize}
+
+%The processor can be considered a hint for the adversary to find out the model of target device.
