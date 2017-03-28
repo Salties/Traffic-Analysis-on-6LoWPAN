@@ -2,14 +2,18 @@
 
 %Different processors result into different response time to the same message; hence the response time can be correlated to the MCU.
 
-Hardware information is generally not considered to be an interested target in Internet traffic analysis attacks. However, in case of sensor network, such 
-information could be valuable. For example, hardware information might be exploited to identify devices with specific vulnerabilities, or to be used as an indicative information for other attacks.
+Hardware informations are generally not considered interested in Internet traffic analysis attacks. In case of sensor network, such 
+information might become be valuable. For example, hardware information might be exploited to identify devices with specific vulnerabilities, or can be used as a hint of what the target does and hence breaches the communication.
 
-Although packets are generally considered to be hardware independent, there are still ways the hardware information could leak. An obvious example is that, when default MAC address is used, one can be immediately look up the manufacturer of using the Burned-In Address (BIA)\cite{BIA}.
+Although network protocols are generally implemented independently to hardware, there are still ways the information could leak through the traffic meta data. For instance, when the default MAC address of a device is used, one can be immediately look up the manufacturer by the Burned-In Address (BIA)\cite{BIA}.
 
-Different driver implementations is also a factor. Among the platforms we tested, we realised that TelosB\cite{TelosB} discards all packets exceeding 127 bytes\footnote{MTU specified by 802.15.4 standard.}, whereas CC2538 is capable of handling packets even up to 160 bytes; therefore an adversary can immediately rule out TelosB if she/he sees a packet larger than 127 bytes.
+Different driver implementations may also leak. Among the platforms we tested, we realised that TelosB\cite{TelosB} discards all packets exceeding 127 bytes\footnote{MTU specified by 802.15.4 standard.}; whereas CC2538 is capable of handling packets even up to 160 bytes. Therefore an adversary can immediately rule out TelosB when any packet larger than 127 bytes is observed.
 
 %Now it comes to PING.
+A more general leakage is the response latency to a specific message, as different processors would have different computational power and thus different time to process the message. The ICMP messages turns out to vulnerable targets against this attack for they are standardised and widely supported. For adveries capable to join the network, PING is especially ideal for such attacks, as
+\begin{itemize}
+	\item PING is mandatory according to the ICMP standard.
+\end{itemize}
 
 %\begin{itemize}
 %	\item PING is a ideal feature in ICMP to launch this attack.
