@@ -10,10 +10,19 @@ Although network protocols are generally implemented independently to hardware, 
 Different driver implementations may also leak. Among the platforms we tested, we realised that TelosB\cite{TelosB} discards all packets exceeding 127 bytes\footnote{MTU specified by 802.15.4 standard.}; whereas CC2538 is capable of handling packets even up to 160 bytes. Therefore an adversary can immediately rule out TelosB when any packet larger than 127 bytes is observed.
 
 %Now it comes to PING.
-A more general leakage is the response latency to a specific message, as different processors would have different computational power and thus different time to process the message. The ICMP messages turns out to vulnerable targets against this attack for they are standardised and widely supported. For adveries capable to join the network, PING is especially ideal for such attacks, as
-\begin{itemize}
-	\item PING is mandatory according to the ICMP standard.
-\end{itemize}
+A more general leakage is the response latency to a specific message, as different processors would have different computational power and thus different time to process the message. The ICMP messages turns out to vulnerable targets against this attack for they are standardised and widely supported. PING is especially ideal for two reasons: 
+\begin{enumerate}
+	\item It is mandatory in the ICMP standard.
+	\item It only swaps the source and destination address of the packet; thus minimises different code path in protocol processing.
+\end{enumerate}
+
+\begin{table}{r}{0.5\textwidth}
+	\center
+	\input{tbl/pingresponse}
+	\caption{PING Response Latency\label{PingResponse}}
+\end{table}
+
+\Cref{PingResponse} shows the PING response latency on CC2538 and TelosB. The result confirms that these devices can be distinguished by PING response latency.
 
 %\begin{itemize}
 %	\item PING is a ideal feature in ICMP to launch this attack.
