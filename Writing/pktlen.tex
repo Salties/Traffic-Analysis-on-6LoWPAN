@@ -1,10 +1,17 @@
-\section{Leakage on Encrypted Contents}
+\section{Packet Length}
+\textit{
+\begin{itemize}
+	\item TLS Attacks still works and even better against DTLS due to protocol feature.
+\end{itemize}
+}
 
-%A primary target of traffic analysis attacks is the plaintext in the encrypted contents. These attacks normally requires the adversary to have the pre-knowledge of a finite set of the potential plaintext; therefore each attack is strongly dependent to a specific application.
+\subsection{ICMP Leakage}
+%Plaintext recovery.
+%\begin{itemize}
+%	\item The attack combines packet length with MAC address information.
+%	\item Works on 802.15.4 Security. No need for DTLS (ICMP is plaintext when DTLS.)
+%\end{itemize}
 
-Many traffic analysis attacks rely heavily on pre-knowledge of communication contents. However, as of this study, it would be inappropriate to make further assumptions about the data being transmitted due to the variety of sensor network applications. Without loss of generality, in this section, we study   two cases of relatively mature standards in the community, namely ICMPv6 and CoAP, respectively.
-
-\paragraph{Types of ICMP Messages}
 
 Internet Control Message Protocol(ICMP)\cite{rfc4443} performs the management tasks in the network, such as link establishment and routing information exchange. Contiki OS supports the following ICMP messages:
 
@@ -51,24 +58,11 @@ For broadcast packets, DIS can be easily identified by its unique 85 bytes packe
 
 In summary, among all the packets, DAO, NA, NS, DIS can be identified with certain. DIO and PING cannot be certainly identified by they both have significant characters. Notice that the above contained all ICMPv6 messages supported; therefore UDP packets can be reversely filtered, although in some cases mixed with DIO and PING.
 
-\paragraph{Sensor Readings with CoAP}
 
-CoAP\cite{rfc7252} is a protocol designed for constraied devices that provides an universal interface for accessing resources. CoAPs is the secure version which stands for CoAP with DTLS.
-
-Due to the different physical characters of sensors, there could be a variance of time when reading the measurements. The idea is to investigate whether such variance can be observed through the packet response latency.
-
-We implemented the experiment on CC2538, using all three sensors from ``cc2538-demo", namely Vdd, temperature and Ambient Light Sensor (ALS). We used CoAP from the ``er-rest-example" in the Contiki OS source code, as there is no CoAPs implementation available. 
-
-Although DTLS processing would definitely have an impact on the response latency, we argue that such impact would be independent to the sensors being accessed; hence similar result would hold even in case of CoAPs.
-
-We have carefully crafted other factors, including URIs, data representation and code flow, to be uniform for all three sensors in order to guarantee a controlled environment.
-
-\begin{table}
-	\center
-	\input{tbl/coapsensors.tex}
-	\caption{CoAP Response Latency for Sensor Readings on CC2538\label{CoapTiming}}
-\end{table}
-
-\Cref{CoapTiming} summarises the result. It is shown that ALS takes about $2$ms longer and hence can be easily distinguished. Vdd and temperature might be difficult to distinguish by response latency as they have similar results.
-
-%To summarise, the above examples confirmed the applicability of classic traffic analysis attacks in case sensor networks. The leakages are significant enough to be observed without utilising any sophisticated analytical tools.
+\subsection{Hardware Leakage}
+%Gain hardware information.
+%\begin{itemize}
+%	\item Some devices can handle longer packets, some can't.
+%	\item Works on both 802.15.4 Security and DTLS.
+%\end{itemize}
+Sometimes the packet length could also leak hardware information, mostly due to hardware limitations or different drivers. For instance, TelosB\cite{TelosB} discards all packets exceeding 127 bytes\footnote{MTU specified by 802.15.4 standard.} whereas CC2538 handles packets even up to 160 bytes. Therefore an adversary can immediately rule out TelosB whenever a packet larger than 127 bytes processed by the target.

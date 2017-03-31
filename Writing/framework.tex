@@ -12,65 +12,10 @@
 \maketitle
 
 %\tableofcontents
-\section{Introduction}
-
-\begin{itemize}
-	\item Security options in 6LoWPAN: 802.15.4 Security and DTLS.
-\end{itemize}
-
-\section{Packet Length}
-\begin{itemize}
-	\item TLS Attacks still works and even better against DTLS due to protocol feature.
-\end{itemize}
-
-\subsection{ICMP Leakage}
-Plaintext recovery.
-\begin{itemize}
-	\item The attack combines packet length with MAC address information.
-	\item Works on 802.15.4 Security. No need for DTLS (ICMP is plaintext when DTLS.)
-\end{itemize}
-
-\subsection{NEW: Hardware Leakage}
-Gain hardware information.
-\begin{itemize}
-	\item Some devices can handle longer packets, some can't.
-	\item Works on both 802.15.4 Security and DTLS.
-\end{itemize}
-
-
-\section{Response Time}
-\begin{itemize}
-	\item TLS attacks still works and even better against DTLS for no RTT noise. 
-\end{itemize}
-
-\subsection{Different Sensors}
-Plaintext recovery.
-\begin{itemize}
-	\item Reading different sensors takes different time.
-	\item Requirement: needs to identify CoAPS packets.
-	\item Works on both 802.15.4 Seuciryt and DTLS, if the requirement is met. 
-\end{itemize}
-
-\subsection{Different Hardware}
-Gain hardware information.
-\begin{itemize}
-	\item Different hardware has different response latency against the same message.
-	\item For 802.15.4: Requires additional information. Can be satisfied by the previous ICMP attack.
-	\item For DTLS: No requirement. The adversary can actively send a message, e.g. PING.
-\end{itemize}
-
-\subsection{Running Code Fingerprint}
-Fingerprints the code running on a device, which leads to plaintext recovery.
-\begin{itemize}
-	\item Theory explained in \Cref{FingerprintTheory}.
-	\item Requirement: needs to actively send messages. Any Request/Response protocol works, such as PING, DTLS Heartbeat, CoAP PING, etc. 
-	\item Not for 802.15.4: adversary can't join the network.
-	\item For DTLS: PING is available and confirmed. DTLS Heartbeat should work if supported.
-\end{itemize}
-
-\AddFigure{fig/PingProbe_Session.png}{How fingerprint works}{FingerprintTheory}
-
-\section{Conclusion}
+\input{introduction}
+\input{pktlen}
+\input{rsptime}
+\input{conclusion}
 
 \bibliographystyle{IEEEtran}
 \bibliography{references,rfc}

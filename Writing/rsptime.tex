@@ -1,0 +1,65 @@
+\section{Response Time}
+\begin{itemize}
+	\item TLS attacks still works and even better against DTLS for no RTT noise. 
+\end{itemize}
+
+\subsection{Different Sensors}
+%Plaintext recovery.
+%\begin{itemize}
+%	\item Reading different sensors takes different time.
+%	\item Requirement: needs to identify CoAPS packets.
+%	\item Works on both 802.15.4 Seuciryt and DTLS, if the requirement is met. 
+%\end{itemize}
+
+CoAP\cite{rfc7252} is a protocol designed for constraied devices that provides an universal interface for accessing resources. CoAPs is the secure version which stands for CoAP with DTLS.
+
+Due to the different physical characters of sensors, there could be a variance of time when reading the measurements. The idea is to investigate whether such variance can be observed through the packet response latency.
+
+We implemented the experiment on CC2538, using all three sensors from ``cc2538-demo", namely Vdd, temperature and Ambient Light Sensor (ALS). We used CoAP from the ``er-rest-example" in the Contiki OS source code, as there is no CoAPs implementation available. 
+
+Although DTLS processing would definitely have an impact on the response latency, we argue that such impact would be independent to the sensors being accessed; hence similar result would hold even in case of CoAPs.
+
+We have carefully crafted other factors, including URIs, data representation and code flow, to be uniform for all three sensors in order to guarantee a controlled environment.
+
+\begin{table}
+	\center
+	\input{tbl/coapsensors.tex}
+	\caption{CoAP Response Latency for Sensor Readings on CC2538\label{CoapTiming}}
+\end{table}
+
+\Cref{CoapTiming} summarises the result. It is shown that ALS takes about $2$ms longer and hence can be easily distinguished. Vdd and temperature might be difficult to distinguish by response latency as they have similar results.
+
+
+
+\subsection{Different Hardware}
+Gain hardware information.
+\begin{itemize}
+	\item Different hardware has different response latency against the same message.
+	\item For 802.15.4: Requires additional information. Can be satisfied by the previous ICMP attack.
+	\item For DTLS: No requirement. The adversary can actively send a message, e.g. PING.
+\end{itemize}
+
+A more general leakage is the response latency to a specific message, as different processors would have different computational power and thus different time to process a same message. The ICMP messages turns out to be suitable for this attack since they are standardised and thus universally supported. Among the ICMP messages, PING is especially ideal for two reasons: 
+\begin{enumerate}
+	\item It is mandatory in the ICMP standard.
+	\item It only swaps the source and destination address of the packet; thus minimises different code path in protocol processing.
+\end{enumerate}
+
+\begin{table}
+	\center
+	\input{tbl/pingresponse}
+	\caption{PING Response Latency\label{PingResponse}}
+\end{table}
+
+\Cref{PingResponse} shows the PING response latency on CC2538 and TelosB. The result confirms that these devices can be distinguished by PING response latency.
+
+\subsection{Running Code Fingerprint}
+Fingerprints the code running on a device, which leads to plaintext recovery.
+\begin{itemize}
+	\item Theory explained in \Cref{FingerprintTheory}.
+	\item Requirement: needs to actively send messages. Any Request/Response protocol works, such as PING, DTLS Heartbeat, CoAP PING, etc. 
+	\item Not for 802.15.4: adversary can't join the network.
+	\item For DTLS: PING is available and confirmed. DTLS Heartbeat should work if supported.
+\end{itemize}
+
+\AddFigure{fig/PingProbe_Session.png}{How fingerprint works}{FingerprintTheory}
