@@ -54,12 +54,23 @@ A more general leakage is the response latency to a specific message, as differe
 \Cref{PingResponse} shows the PING response latency on CC2538 and TelosB. The result confirms that these devices can be distinguished by PING response latency.
 
 \subsection{Running Code Fingerprint}
-Fingerprints the code running on a device, which leads to plaintext recovery.
-\begin{itemize}
-	\item Theory explained in \Cref{FingerprintTheory}.
-	\item Requirement: needs to actively send messages. Any Request/Response protocol works, such as PING, DTLS Heartbeat, CoAP PING, etc. 
-	\item Not for 802.15.4: adversary can't join the network.
-	\item For DTLS: PING is available and confirmed. DTLS Heartbeat should work if supported.
-\end{itemize}
+%Fingerprints the code running on a device, which leads to plaintext recovery.
+%\begin{itemize}
+%	\item Theory explained in \Cref{FingerprintTheory}.
+%	\item Requirement: needs to actively send messages. Any Request/Response protocol works, such as PING, DTLS Heartbeat, CoAP PING, etc. 
+%	\item Not for 802.15.4: adversary can't join the network.
+%	\item For DTLS: PING is available and confirmed. DTLS Heartbeat should work if supported.
+%\end{itemize}
+The response time of packets can also be exploited to fingerprint the code running on a specific device. \Cref{FingerprintTheory} demonstrates the fundamental idea of the code fingerprinting attack. 
 
-\AddFigure{fig/PingProbe_Session.png}{How fingerprint works}{FingerprintTheory}
+\begin{figure}
+	\center
+	\includegraphics[width=\textwidth]{fig/PingProbe_Theory.png}
+	\caption{Variations in PING Response Latency\label{FingerprintTheory}}
+\end{figure}
+
+%How it works
+
+%What can be the Request
+
+%Experiment Result
