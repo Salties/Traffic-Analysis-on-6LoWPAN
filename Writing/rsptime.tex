@@ -61,7 +61,7 @@ A more general leakage is the response latency to a specific message, as differe
 %	\item Not for 802.15.4: adversary can't join the network.
 %	\item For DTLS: PING is available and confirmed. DTLS Heartbeat should work if supported.
 %\end{itemize}
-The response time of packets can also be exploited to fingerprint the code running on a specific device. \Cref{FingerprintTheory} demonstrates the fundamental idea of the code fingerprinting attack. 
+The response time of packets can also be exploited to fingerprint the code running on a specific device. 
 
 \begin{figure}
 	\center
@@ -70,7 +70,13 @@ The response time of packets can also be exploited to fingerprint the code runni
 \end{figure}
 
 %How it works
+\Cref{FingerprintTheory} illustrates two sensors receiving a service request. The first node was idle and hence responded immediately, whilst the second postponed the request for reading a sensor. As a result, the response time on the second sensor would appear to be longer than the first sensor. This scenario applies to the majority of constrained devices as they are mostly single-cored. 
+
+The idea of code fingerprinting exploits such extended response time. Since different task extends the response time differently, distributions of extended response time can be used as fingerprint to the code running on the device. The statistical distance between the distributions can therefore used as an indicator for matching the fingerprints.
 
 %What can be the Request
+To effectively launch the attack, the requests needs to be actively sent by the adversary. Since code information is actually contained in extended  length of response time; therefore requests with short constant processing time are preferable as they induce less noise. 
+
+In practice, the request can be instantiated by several messages defined in the sensor network protocols. PING is ideal as it induces only negligible computation and is compulsory according to the ICMP standard\cite{rfc4433}. Other options include Heartbeat message in DTLS\cite{rfc6520}, Reset in CoAP\cite{rfc7252}, etc.
 
 %Experiment Result
