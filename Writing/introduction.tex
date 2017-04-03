@@ -1,6 +1,18 @@
 \section{Introduction}
-\textit{
+{\it
+A typical sensor network is built as described in \Cref{Protocols}.
+
+\begin{table}[!h]
+	\centering
+	\input{tbl/protocols.tex}
+	\caption{Protocol stack for sensor networks. (* are optional.)\label{Protocols}}
+\end{table}
+
+
 \begin{itemize}
 	\item Security options in 6LoWPAN: 802.15.4 Security and DTLS.
+	\item Eavesdropping is easier for 6LoWPAN.
 \end{itemize}
+
+We discussed packet features independently in this paper but in practice they can be analysed jointly to reveal more leakage.
 }

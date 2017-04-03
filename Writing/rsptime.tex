@@ -1,7 +1,9 @@
 \section{Response Time}
-\begin{itemize}
-	\item TLS attacks still works and even better against DTLS for no RTT noise. 
-\end{itemize}
+Response time is another major feature exploited in Internet traffic analysis attack. Again we would expect the same attacks can be applied to 6LoWPAN traffic and works even better than their counterparts against Internet traffic, as the accuracy of timing measurements can be greatly improved for 6LoWPAN traffic. 
+
+Firstly, the devices are physically close to each other and uses RF to communicate. The adversary can remove the RTT noises by measure the packets on the server side. 
+
+Secondly, performance of the constrained devices are low; hence gives a better resolution on timing code execution.
 
 \subsection{Different Sensors}
 %Plaintext recovery.
@@ -32,12 +34,12 @@ We have carefully crafted other factors, including URIs, data representation and
 
 
 \subsection{Different Hardware}
-Gain hardware information.
-\begin{itemize}
-	\item Different hardware has different response latency against the same message.
-	\item For 802.15.4: Requires additional information. Can be satisfied by the previous ICMP attack.
-	\item For DTLS: No requirement. The adversary can actively send a message, e.g. PING.
-\end{itemize}
+%Gain hardware information.
+%\begin{itemize}
+%	\item Different hardware has different response latency against the same message.
+%	\item For 802.15.4: Requires additional information. Can be satisfied by the previous ICMP attack.
+%	\item For DTLS: No requirement. The adversary can actively send a message, e.g. PING.
+%\end{itemize}
 
 A more general leakage is the response latency to a specific message, as different processors would have different computational power and thus different time to process a same message. The ICMP messages turns out to be suitable for this attack since they are standardised and thus universally supported. Among the ICMP messages, PING is especially ideal for two reasons: 
 \begin{enumerate}
