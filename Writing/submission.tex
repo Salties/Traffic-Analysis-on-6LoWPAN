@@ -1,0 +1,98 @@
+\documentclass{river-journal}
+\usepackage{rivps}
+\usepackage[mtbold]{mathtime}
+
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{subfigure}
+\usepackage{cite}
+
+% for alternatives, see appendix of manual
+
+\newtheorem{guess}{Conjecture}
+
+% bibliographies
+\bibliographystyle{plain}
+% also tested with natbib
+
+\raggedbottom
+\sloppy\par
+
+\begin{document}
+\begin{opening}
+\title{A Sample Document}
+\author{Yan Yan \& Elisabeth Oswald \& Theo Tryfonas}
+\institute{University of Bristol,  \texttt{y.yan@bristol.ac.uk}}
+\end{opening}
+
+\runningtitle{Exploring Potential 6LoWPAN Traffic Side Channels}
+\runningauthor{Y. Yan}
+
+\subsection*{Abstract}
+The Internet of Things has become a reality: small connected devices feature in everyday objects
+including childrens' toys, TVs, fridges, heating control units, etc. Supply chains feature sensors
+throughout, and significant investments go into researching next-generation healthcare, 
+where sensors monitor wellbeing. A future in which sensors and other (small) devices interact to create sophisticated applications seems just around the corner . All of these applications have a fundamental need for security and privacy and thus we need to deploy cryptography as part an attempt to secure them. In this paper we explore a particular type of flaw, namely side channel information, on the protocol level. Our research investigates the potential for utilising packet length and timing information (both are easily obtained) to extract interesting information from a system, despite the use of cryptography. 
+
+\keywords{6LoWPAN, Side Channels, Traffic Analysis}
+
+\section{Introduction}
+The expression `Internet of Things' (IoT) can refer to a multitude of objects and protocols, which share that they have been purposefully designed for resource constraint environments. Whereas the typical TCP/IP network stack produces considerable overhead to achieve quality of service for applications that are based on it, the nature of many IoT `things' is such that a full implementation of it would not be practical. Often `things' are sensor, which are devices that have to function on little resources (most importantly power). Thus a whole host of new networking protocols have been developed over the years to cater for such resource constrained devices: 6LoWPAN is the `tiny' version of IPv6, UDP tends to be used instead of TCP/IP, DTLS can be used for end-to-end security or one can directly invoke 802.15.4. security which is part of 6LoWPAN, and finally CoAP(s) is the replacement for HTTP(s). Thus there are two options (802.15.4, and DTLS) to secure communications between the `things' and a server/gateway. 
+
+Implementing cryptography correctly and securely has proven to be a massive challenge as evidenced by the multitude of implementation attacks over the years. Triggered off by research that showed how to utilise additional information via timing and power side channels (CITE Kocher), many different flavours of side channel attacks were discovered over the last decade. Many attacks use phyiscal information (such as low level execution timings or power consumption) to recover secret keys, but many other attacks use protocol level information (such as packet lengths, types of packets or protocol messages) to recover information about plaintexts, devices in the network, or the network itself. 
+There exists a considerable body of work in the context of conventional, i.e. HTTPs over TCP/IP network, but the applicability of (some) of these attacks in the context of a typical IoT protocol stack is lacking. This is the gap that we would like to address within this submission. 
+
+This paper is structured as follows: after reviewing some relevant attack paths for HTTPs over TCP/IP in the following subsection, we provide a brief introduction to the necessary protocol and network features in Section XXX.  We discuss the impact of packet length leakage in Section XX, followed by an analysis of the response time leakage in Section YY. We summarise our work in Section ZZ. 
+\subsection{Related Work}
+
+Write about attacks that exploit packet length and response times in the context of TCP/IP. Reflect on web applications and how the same might happen if more interesting applications might be deployed that involve IoT objects.  
+
+\section{A Typical IoT Protocol Stack}
+A typical sensor network is built as described in \Cref{Protocols}.
+
+\begin{table}[!h]
+	\centering
+	\input{tbl/protocols.tex}
+	\caption{Protocol stack for sensor networks. (* are optional.)\label{Protocols}}
+\end{table}
+
+
+\begin{itemize}
+	\item Security options in 6LoWPAN: 802.15.4 Security and DTLS.
+	\item Eavesdropping is easier for 6LoWPAN.
+\end{itemize}
+
+\section{Exploiting Packet Length Information}
+\section{Exploiting Response Time Information}
+\section{Conclusion}
+
+\appendix
+
+And this is my Appendix.
+
+\subsection*{Appendix Subsection}
+
+Some text.
+
+%\nocite{*} % add all entries from sample.bib
+
+\bibliography{references,rfc}
+%\begin{thebibliography}{10}
+
+
+
+%\end{thebibliography}
+
+%\section*{Biography}
+%
+%\fbox{\parbox[t]{3cm}{Here is space for \\
+%a photograph of \\
+%the author. \\
+%\vspace*{2cm}
+%}}
+%
+%\medskip
+%\noindent
+%{\bf Author's name}. A short vitae can be included here.
+
+\end{document}

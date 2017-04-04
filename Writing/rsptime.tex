@@ -82,3 +82,26 @@ To effectively launch the attack, the requests needs to be actively sent by the 
 In practice, the request can be instantiated by several messages defined in the sensor network protocols. PING is ideal as it induces only negligible computation and is compulsory according to the ICMP standard\cite{rfc4433}. Other options include Heartbeat message in DTLS\cite{rfc6520}, Reset in CoAP\cite{rfc7252}, etc.
 
 %Experiment Result
+We experimented the attack on a CC2538 to verify its practicability. PING is chosen as the protocol for request and response. We use the term PING Response Interval, PRI, to denote the response time between a PING request and PING response.
+
+Since the attack extracts the information contained in the extended response time of a specific request, the first problem is to see whether such extended response time can be filtered from normal ones. 
+
+We collected the PRIs for the  Contiki example ``helloworld''. \Cref{HelloworldPri} shows the histogram of the PRIs, where values $\geq$12ms are collected at 12ms. The result shows that the majority of PRIs are clustered around 9.5ms, whilst a clear gap exists between the outliers, that is, the extended response time that could be exploited by the attack. 
+
+The results suggests that for this device, CC2538, PING is normally responded in [9.0, 10.3]ms, which corresponds to the case of Sensor Node 1 in \Cref{FingerprintTheory}. We further plotted the outliers in \Cref{HelloworldPriOutliers}. We suppose the outliers are caused by PING request arriving when the processor was performing another task as described by the case of Sensor Node 2 in \Cref{FingerprintTheory}. The distribution shown in \Cref{HelloworldPriOutliers} is due to the fact that different tasks delays the PING request differently.
+
+\begin{figure}[!h]
+	\centering
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=\textwidth]{fig/helloworld_cc2538.png}
+		\caption{PRIs of helloworld\label{HelloworldPri}}
+	\end{subfigure}
+	\begin{subfigure}{0.45\textwidth}
+		\includegraphics[width=\textwidth]{fig/helloworld_cc2538_outlier.png}
+		\caption{PRIs outliers of helloworld\label{HelloworldPriOutliers}}
+	\end{subfigure}
+\end{figure}
+
+We repeated the experiment for different applications on CC2538. For PRIs we collected on each application, the majority is clustered near 9.5ms and there exists a clear gap between the normal ones and the upper outliers. This implies that an adversary can draw a threshold by simply observing the distribution of PRIs. In our experiments the threshold is set to 12ms but we suppose other values that can separate the extended PRIs would also work for the attack.
+
+%Comparing the distribution.
