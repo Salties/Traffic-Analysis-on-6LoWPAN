@@ -55,7 +55,7 @@ A more general leakage is the response latency to a specific message, as differe
 
 \Cref{PingResponse} shows the PING response latency on CC2538 and TelosB. The result confirms that these devices can be distinguished by PING response latency.
 
-\subsection{Running Code Fingerprint}
+\subsection{Program Fingerprint}
 %Fingerprints the code running on a device, which leads to plaintext recovery.
 %\begin{itemize}
 %	\item Theory explained in \Cref{FingerprintTheory}.
@@ -123,4 +123,36 @@ The result in \Cref{HelloworldPri} showed a clear gap between the usual PRIs and
 
 \subsubsection{Fingerprint Matching}
 %Comparing the distribution.
-Following the hypothesis, we expect a distinctive outlier PRI distribution for each different program running on the target device which can be used as a fingerprint to the program being ran. To identify an unknown program r
+We collected the fingerprints for three programs taken from the Contiki OS examples:
+\begin{description}
+	\item[broadcast] This is taken as it is from the example which periodically broadcasts a constant message.
+	 
+	\item[powertrace] This is taken as it is from the example which records the power consumption and broadcasts a constant message.
+	
+	\item[Sensorpayload] This program is based on the ``er-rest-example'' embedded together with sensor accesses taken from ``cc2538-demo''. It captures a real case scenario where three different sensors, namely Temperature, VDD and ALS, are being access through CoAP.
+\end{description}
+
+Specifically for ``Sensorpayload'' we collected fingerprints for 8 different scenarios where different sensors are being accessed. For each program we independently collected 2 fingerprints for comparison.
+
+\Cref{FingerprintApps} summarises the total 20 fingerprints we collected for the experiment.
+
+During the experiments we realised that most of the fingerprints does not subject to any common distributions as expected; therefore we used Kolmogorov-Smirnov Distance as the statistics. \Cref{ksdistances} summarises the relative KS distances computed on each pair of fingerprints in our experiments.
+
+Although fingerprints collected on the same application basically failed to pass the Kolmogorov-Smirnov Test, we realised that their KS distance tends to be smaller comparing to fingerprints collected on different programs, as the \textbf{bold} cells marked in \Cref{ksdistances}. 
+
+By matching fingerprints with the minimum KS distance, 13 out of 20 fingerprints in our experiments have successfully matched the paired one collected on the same program, which suggests a much better result than random matching.
+
+Further more the mismatch only occur among the ``Sensorpayload'' program and fingerprints collected on the same program still tends to have relatively low KS distances. Considering they share most of the code except a slight difference in reading different sensors, the KS distances of fingerprints might also be suggested as a support measurement of similarity of different programs.
+
+\subsection{Countermeasure}
+%Two options:
+%\begin{itemize}
+%	\item Randomise response time: needs to be resilient to statistical analysis.
+%	\item Threashold response time (discard or reply in a constant time): performance tradeoff. Recommended for unreliable transmissions.
+%\end{itemize}
+Timing countermeasures are relatively hard to be implemented due to hardware restrictions. There are two common countermeasures considered:
+\begin{itemize}
+	\item Randomly delay the response. However, the randomness must be carefully chosen to be statistically resilient which indicates potential computational overhead.
+	 
+	\item Use threshold response time, i.e. a request is either responded at a predefined time or not responded at all. This method is recommended as most 6LoWPAN application would tolerate missing packets and timer is available on most platforms. However, the threshold must be carefully chosen to preserve the functionality of the 6LoWPAN application.
+\end{itemize}

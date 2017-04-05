@@ -67,8 +67,18 @@ In summary, among all the packets, DAO, NA, NS, DIS can be identified with certa
 Sometimes the packet length could also leak hardware information, mostly due to hardware limitations or different drivers. For instance, TelosB\cite{TelosB} discards all packets exceeding 127 bytes\footnote{MTU specified by 802.15.4 standard.} whereas CC2538 handles packets even up to 160 bytes. Therefore an adversary can immediately rule out TelosB whenever a packet larger than 127 bytes processed by the target.
 
 \subsection{Countermeasure}
-{\it
-Pad to MTU is recommended as it completely hides the length of plaintext. This method only induces slight overhead as 6LoWPAN MTU is small and requires only negligible computation.
+%{\it
+%Pad to MTU is recommended as it completely hides the length of plaintext. This method only induces slight overhead as 6LoWPAN MTU is small and requires only negligible computation.
+%
+%Unifying the drivers by strictly apply the standard MTU. Applications should be compatible to the standard anyway. 
+%}
+A general countermeasure to packet length leakage is padding, as studied in \cite{Peekaboo}. Although Padding to MTU is considered inefficient for Internet, it is recommended for 6LoWPAN as:
+\begin{itemize}
+	\item It completely hides the length of original plaintext.
+	\item 6LoWPAN has only a low MTU of 127 bytes; therefore the overhead is relatively acceptable.
+	\item It induces negligible computational overhead.
+\end{itemize}
 
-Unifying the drivers by strictly apply the standard MTU. Applications should be compatible to the standard anyway. 
-}
+%Resourceful applications can enhance the countermeasure by inserting dummy packets.
+
+With regard to the hardware leakage, we suggest strictly applying the standard MTU to eliminate the differences in drivers. Although there is a potential of performance downgrade, but it will also improve the compatibility Samong different devices.
