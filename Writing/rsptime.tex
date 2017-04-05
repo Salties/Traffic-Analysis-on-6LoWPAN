@@ -81,14 +81,21 @@ To effectively launch the attack, the requests needs to be actively sent by the 
 
 In practice, the request can be instantiated by several messages defined in the sensor network protocols. PING is ideal as it induces only negligible computation and is compulsory according to the ICMP standard\cite{rfc4433}. Other options include Heartbeat message in DTLS\cite{rfc6520}, Reset in CoAP\cite{rfc7252}, etc.
 
+\subsubsection{PING Response Time Distribution}
 %Experiment Result
-We experimented the attack on a CC2538 to verify its practicability. PING is chosen as the protocol for request and response. We use the term PING Response Interval, PRI, to denote the response time between a PING request and PING response.
+PING is one of the most known ideal protocol for this attack. We measured its response time on CC2538 running Contiki OS. Since Contiki MAC\cite{ContikiMAC} sends duplicated PING requests, we define the PING Response Interval, PRI, to be the time between a PING response and its last paired request. 
 
-Since the attack extracts the information contained in the extended response time of a specific request, the first problem is to see whether such extended response time can be filtered from normal ones. 
+\Cref{ExamplePri} shows an example where Packet 205 and Packet 203 constitute a pair of PING packets, and their PRI is computed as their difference in time.
 
-We collected the PRIs for the  Contiki example ``helloworld''. \Cref{HelloworldPri} shows the histogram of the PRIs, where values $\geq$12ms are collected at 12ms. The result shows that the majority of PRIs are clustered around 9.5ms, whilst a clear gap exists between the outliers, that is, the extended response time that could be exploited by the attack. 
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=\textwidth]{fig/PRI_hl.png}
+	\caption{Example PRI\label{ExamplePri}}
+\end{figure}
 
-The results suggests that for this device, CC2538, PING is normally responded in [9.0, 10.3]ms, which corresponds to the case of Sensor Node 1 in \Cref{FingerprintTheory}. We further plotted the outliers in \Cref{HelloworldPriOutliers}. We suppose the outliers are caused by PING request arriving when the processor was performing another task as described by the case of Sensor Node 2 in \Cref{FingerprintTheory}. The distribution shown in \Cref{HelloworldPriOutliers} is due to the fact that different tasks delays the PING request differently.
+%Since the attack extracts the information contained in the extended response time of a specific request, the first problem is to see whether such extended response time can be filtered from normal ones. 
+
+\Cref{HelloworldPri} shows the histogram of PRIs collected for ``helloworld'' example from Contiki OS. Values $\geq$12ms are collected at 12ms. The result shows that the majority of PRIs are clustered around 9.5ms, whilst a clear gap exists between the majority and the outliers. The majority, which roughly ranged [9.0, 10.3]ms, corresponds to the case of Sensor Node 1 in \Cref{FingerprintTheory}. 
 
 \begin{figure}[!h]
 	\centering
@@ -100,8 +107,14 @@ The results suggests that for this device, CC2538, PING is normally responded in
 		\includegraphics[width=\textwidth]{fig/helloworld_cc2538_outlier.png}
 		\caption{PRIs outliers of helloworld\label{HelloworldPriOutliers}}
 	\end{subfigure}
+	\caption{PRIs for helloworld}
 \end{figure}
 
-We repeated the experiment for different applications on CC2538. For PRIs we collected on each application, the majority is clustered near 9.5ms and there exists a clear gap between the normal ones and the upper outliers. This implies that an adversary can draw a threshold by simply observing the distribution of PRIs. In our experiments the threshold is set to 12ms but we suppose other values that can separate the extended PRIs would also work for the attack.
+We further plotted the upper outliers, which mostly ranged from [12, 2000]ms, in \Cref{HelloworldPriOutliers}. We suppose these outliers corresponds to the case of Sensor Node 2 in \Cref{FingerprintTheory} which PING request arrived when the processor was performing another task. We suppose the distribution of PRI shown in \Cref{HelloworldPriOutliers} is due to different tasks delays the PING request differently.
+
+PRIs we collected on other applications showed the same characteristic. The majorities are clustered near a medium value. A clear proportion of outliers exists, leaving a clear gap between the majority. This implies that an adversary can easily draw a threshold by observing the distribution of PRIs to filter the ones corresponds to the extended response time. In our experiments the threshold is set to 12ms but any other values within the gap would also work.
+
+\subsubsection{Matching Fingerprint}
 
 %Comparing the distribution.
+As of the hypothesis, we expect an distinctive outlier distribution to be used as a fingerprint of each different application. 
