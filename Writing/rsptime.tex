@@ -63,27 +63,32 @@ A more general leakage is the response latency to a specific message, as differe
 %	\item Not for 802.15.4: adversary can't join the network.
 %	\item For DTLS: PING is available and confirmed. DTLS Heartbeat should work if supported.
 %\end{itemize}
-The response time of packets can also be exploited to fingerprint the code running on a specific device. 
+The response time of packets could also be exploited to fingerprint the code running on a specific device. 
+
+\subsubsection{Hypothesis}
+%How it works
+\Cref{FingerprintTheory} hypothesises two sensors receiving a service request. The first node was idle and hence responded immediately, whilst the second postponed the request for reading a sensor. As a result, the response time on the second sensor would appear to be longer than the first sensor. This scenario applies to the majority of constrained devices as they are mostly single-cored. 
 
 \begin{figure}
 	\center
 	\includegraphics[width=\textwidth]{fig/PingProbe_Theory.png}
-	\caption{Variations in PING Response Latency\label{FingerprintTheory}}
+	\caption{Variations in Response Time\label{FingerprintTheory}}
 \end{figure}
 
-%How it works
-\Cref{FingerprintTheory} illustrates two sensors receiving a service request. The first node was idle and hence responded immediately, whilst the second postponed the request for reading a sensor. As a result, the response time on the second sensor would appear to be longer than the first sensor. This scenario applies to the majority of constrained devices as they are mostly single-cored. 
+Most sensors are programmed to run in a loop. The idea of code fingerprinting exploits the fact that each program delays the request differently; thus statistically each program results into a distinctive distribution of delayed response time. 
 
-The idea of code fingerprinting exploits such extended response time. Since different task extends the response time differently, distributions of extended response time can be used as fingerprint to the code running on the device. The statistical distance between the distributions can therefore used as an indicator for matching the fingerprints.
+\begin{definition}
+	We refer the distribution of delayed response time as a \textbf{``fingerprint''} to the program running on the sensor node.
+\end{definition}
+
+We assume the adversary has the pre-knowledge of potential programs, together with a database of all their fingerprints. To identify an unknown program, the adversary collects its fingerprint and then searches the database for a match.
 
 %What can be the Request
-To effectively launch the attack, the requests needs to be actively sent by the adversary. Since code information is actually contained in extended  length of response time; therefore requests with short constant processing time are preferable as they induce less noise. 
+To effectively launch the attack, the requests needs to be actively sent by the adversary. Since code information is actually contained in extended  length of response time; therefore requests with short constant processing time are preferable as they induce less noise. In practice, the request can be instantiated by several messages defined in the sensor network protocols. PING is ideal as it induces only negligible computation and is compulsory according to the ICMP standard\cite{rfc4433}. Other options include Heartbeat message in DTLS\cite{rfc6520}, Reset in CoAP\cite{rfc7252}, etc.
 
-In practice, the request can be instantiated by several messages defined in the sensor network protocols. PING is ideal as it induces only negligible computation and is compulsory according to the ICMP standard\cite{rfc4433}. Other options include Heartbeat message in DTLS\cite{rfc6520}, Reset in CoAP\cite{rfc7252}, etc.
-
-\subsubsection{PING Response Time Distribution}
+\subsubsection{Extracting Fingerprint}
 %Experiment Result
-PING is one of the most known ideal protocol for this attack. We measured its response time on CC2538 running Contiki OS. Since Contiki MAC\cite{ContikiMAC} sends duplicated PING requests, we define the PING Response Interval, PRI, to be the time between a PING response and its last paired request. 
+We measured PING response time on CC2538 running Contiki OS. Since Contiki MAC\cite{ContikiMAC} sends duplicated PING requests, we define the PING Response Interval, PRI, to be the time between a PING response and its last paired request. 
 
 \Cref{ExamplePri} shows an example where Packet 205 and Packet 203 constitute a pair of PING packets, and their PRI is computed as their difference in time.
 
@@ -95,7 +100,7 @@ PING is one of the most known ideal protocol for this attack. We measured its re
 
 %Since the attack extracts the information contained in the extended response time of a specific request, the first problem is to see whether such extended response time can be filtered from normal ones. 
 
-\Cref{HelloworldPri} shows the histogram of PRIs collected for ``helloworld'' example from Contiki OS. Values $\geq$12ms are collected at 12ms. The result shows that the majority of PRIs are clustered around 9.5ms, whilst a clear gap exists between the majority and the outliers. The majority, which roughly ranged [9.0, 10.3]ms, corresponds to the case of Sensor Node 1 in \Cref{FingerprintTheory}. 
+\Cref{HelloworldPri} shows the histogram of PRIs collected on ``helloworld'' example from Contiki OS. Values $\geq$12ms are collected at 12ms. The result shows that the majority of PRIs are clustered around 9.5ms, whilst a clear gap exists between the majority and the outliers. The majority, roughly ranged [9.0, 10.3]ms, corresponds to the case of Sensor Node 1 in \Cref{FingerprintTheory}. 
 
 \begin{figure}[!h]
 	\centering
@@ -110,11 +115,13 @@ PING is one of the most known ideal protocol for this attack. We measured its re
 	\caption{PRIs for helloworld}
 \end{figure}
 
-We further plotted the upper outliers, which mostly ranged from [12, 2000]ms, in \Cref{HelloworldPriOutliers}. We suppose these outliers corresponds to the case of Sensor Node 2 in \Cref{FingerprintTheory} which PING request arrived when the processor was performing another task. We suppose the distribution of PRI shown in \Cref{HelloworldPriOutliers} is due to different tasks delays the PING request differently.
+We further plotted the upper outliers, which mostly ranged from [12, 2000]ms, in \Cref{HelloworldPriOutliers}. We suppose these outliers corresponds to the case of Sensor Node 2 in \Cref{FingerprintTheory} which PING request arrived when the processor was performing another task.
 
-PRIs we collected on other applications showed the same characteristic. The majorities are clustered near a medium value. A clear proportion of outliers exists, leaving a clear gap between the majority. This implies that an adversary can easily draw a threshold by observing the distribution of PRIs to filter the ones corresponds to the extended response time. In our experiments the threshold is set to 12ms but any other values within the gap would also work.
+PRIs we collected on other applications showed the same characteristic. The majorities are clustered near a medium value. A clear proportion of outliers exists, leaving a clear gap between the majority. This implies that an adversary can easily draw a threshold by observing the whole distribution and then filter the extended ones out. In our experiments the threshold is set to 12ms but any other values within the gap would also work. 
 
-\subsubsection{Matching Fingerprint}
+According to the hypothesis, the  distribution shown in \Cref{HelloworldPriOutliers} is due to different tasks delays the PING request differently. According to the hypothesis
 
+
+\subsubsection{Fingerprint Matching}
 %Comparing the distribution.
-As of the hypothesis, we expect an distinctive outlier distribution to be used as a fingerprint of each different application. 
+Following the hypothesis, we expect a distinctive outlier PRI distribution for each different program running on the target device which can be used as a fingerprint to the program being ran. To identify an unknown program r
