@@ -10,6 +10,9 @@
 \usepackage{url}
 \usepackage{subcaption}
 \usepackage{multirow}
+
+\input{packages}
+
 % for alternatives, see appendix of manual
 
 %\newtheorem{guess}{Conjecture}
@@ -21,7 +24,7 @@
 
 
 \title{Exploring Potential 6LoWPAN Traffic Side Channels}
-\author{Yan Yan \& Elisabeth Oswald \& Theo Tryfonas}
+\author{Yan Yan \and Elisabeth Oswald \and Theo Tryfonas}
 
 \begin{document}
 \maketitle
@@ -48,9 +51,18 @@ There exists a considerable body of work in the context of conventional, i.e. HT
 
 This paper is structured as follows: after reviewing some relevant attack paths for HTTPs over TCP/IP in the following subsection, we provide a brief introduction to the necessary protocol and network features in Section XXX.  We discuss the impact of packet length leakage in Section XX, followed by an analysis of the response time leakage in Section YY. We summarise our work in Section ZZ. 
 
-\input{relatedwork}
-%\subsection{Related Work}
-%Write about attacks that exploit packet length and response times in the context of TCP/IP. Reflect on web applications and how the same might happen if more interesting applications might be deployed that involve IoT objects.  
+\subsection{Related Work}
+%Write about attacks that exploit packet length and response times in the context of TCP/IP. Reflect on web applications and how the same might happen if more interesting applications might be deployed that involve IoT objects.
+
+%Literatures about Traffic Analysis...
+Traffic Analysis is well studied in the context of encrypted Internet traffic, especially for web applications based on HTTPs and TCP/IP. The landmark study by Chen et al. \cite{WebSidechannel} discussed different side channel attacks against web applications and \cite{SuggestBox} studied the practicability of an attack specifically targeted Google and Bing search boxes. Later work by Mather and Oswald \cite{PinpointWeb} proposed the use of Mutual Information to pinpoint the potential leakage points in web traffic. For non-HTTPs applications, the papers \cite{AppleMsg}, \cite{Language} and \cite{VideoTraffic} described attacks against encrypted text, voice and video traffic respectively. Machine learning is widely used to analyse the traffic, and behaviours of different classifiers are studied by \cite{HClassifier} and \cite{Peekaboo}. Based on all these published works we can conclude that two features, the packet length and response time, are the most exploited ones among all attacks. Different countermeasures were studied by \cite{TrafficMorphing}, \cite{HTTPOS} and \cite{FTE}.
+
+Reflecting on IoT applications, we stipulate that most of these attacks may still be applicable, as we intend to demonstrate in this paper. Considering the future vision that IoT devices could be indeed connected to the Internet with even more sensitive data flowing over different networks, the task of designing secure IoT applications becomes increasingly challenging.
+
+%Literatures about 6LoWPAN security
+With regard to the aspect of protocol design, the recent paper \cite{6LoWPANAtk} summarised some known flaws of 6LoWPAN, including its susceptibility to the Fragmentation Attack\cite{FragAtk}, Sinkhole Attack\cite{Sinkhole}, Hello Flood Attack\cite{HelloFlood}, Wormhole Attack\cite{Wormhole} and Blackhole Attack\cite{Blackhole}. In addition, \cite{802154SecIssues} reported certain problematic designs in 802.15.4 security\cite{802154}.
+
+TODO: if space and time say some more about these attacks. At least say if they relate to the type of leakage we are exploiting or if they are completely independent (which is what I would guess). 
 
 \input{iotprotocols}
 %\section{A Typical IoT Protocol Stack}
@@ -125,23 +137,6 @@ TODO: why would you get the network topology (do you mean via observing the diff
 %\end{itemize}
 
 In the classical Internet world, ICMP has been well known for its use for OS fingerprinting (CITATION NEEDED). In the case of the IoT, this could be possible as well (as different OS support different subsets of ICMP), however an additional attack vector exists. This is because different IoT devices have different hardware limitations or drivers. We noticed that our TelosB\cite{TelosB} discards all packets exceeding 127 bytes\footnote{MTU specified by 802.15.4 standard.} whereas our CC2538 handles packets even up to 160 bytes. Therefore an adversary can immediately rule out TelosB whenever a packet larger than 127 bytes processed by the target.
-
-\subsection{Guidance to IoT software developers}
-%{\it
-%Pad to MTU is recommended as it completely hides the length of plaintext. This method only induces slight overhead as 6LoWPAN MTU is small and requires only negligible computation.
-%
-%Unifying the drivers by strictly apply the standard MTU. Applications should be compatible to the standard anyway. 
-%}
-A general countermeasure to avoid leaks related to the packet length leakage is padding, as studied in \cite{Peekaboo}. Whilst padding to MTU is considered inefficient for Internet, it is in fact highly appropriate for 6LoWPAN because:
-\begin{itemize}
-	\item It completely hides the length of original plaintext.
-	\item 6LoWPAN has only a low MTU of 127 bytes; therefore the overhead is acceptable.
-	\item It induces negligible computational overhead.
-\end{itemize}
-
-%Resourceful applications can enhance the countermeasure by inserting dummy packets.
-
-With regard to the leaking information about the device or OS, we suggest strictly applying the standard MTU to eliminate the differences in drivers. Although there is a potential of performance downgrade, but it will also improve the compatibility among different devices.
 
 
 \section{Exploiting Response Time Information}
@@ -273,13 +268,28 @@ Although fingerprints collected on the same application were rejected by the Kol
 
 By adapting our distinguisher to utilise the minimum KS distance, we were able to identify 13 out of 20 fingerprints successfully. The `overlapping' fingerprints are mainly due to the ``Sensorpayload'' program, which access different sensors, but otherwise has identical program code. Thus we did expect that the different instantiations of it would lead to very similar fingerprints. 
 
-\subsection{Guidance for IoT software developers}
+\section{Conclusion}
+
+In this paper we explore, for the first time, the use of packet lengths and response times, which are protocol level side channels, as means to recover information about IoT `things'. We do this via some experiments, which we base on two extremely popular devices running on a popular open source OS, with a typical stack of protocols. Whilst we do not cover a wide range of devices, the fact that two of the most popular devices show the characteristics that we hypothesise, gives credibility to our results. Our results show that it is possible (in principle) to recover information about a device and its function (i.e. the hardware and the software that runs on it) via inspecting encrypted traffic that it produces. We also point out that ICMP messages can be distinguished from each other despite the use of encryption. 
+
+In order to mitigate the leakage that is given by packet lengths, previous works recommends padding \cite{Peekaboo}. We echo this recommendation. Whilst padding to MTU is considered inefficient for the Internet, it is in fact highly appropriate for 6LoWPAN because:
+\begin{itemize}
+	\item It completely hides the length of original plaintext.
+	\item 6LoWPAN has only a low MTU of 127 bytes; therefore the overhead is acceptable.
+	\item It induces negligible computational overhead.
+\end{itemize}
+
+%Resourceful applications can enhance the countermeasure by inserting dummy packets.
+
+With regard to the leaking information about the device or OS, we suggest strictly applying the standard MTU to eliminate the differences in drivers. Although there is a potential of performance downgrade, but it will also improve the compatibility among different devices.
+
+
 %Two options:
 %\begin{itemize}
 %	\item Randomise response time: needs to be resilient to statistical analysis.
 %	\item Threashold response time (discard or reply in a constant time): performance tradeoff. Recommended for unreliable transmissions.
 %\end{itemize}
-It is notoriously difficult to produce time-constant code. But two approaches are available to a software developer:
+In order to mitigate the leakage given by response times, the natural countermeasure is to write time-constant code, which is known to be notoriously difficult. But two approaches are available to a software developer:
 \begin{itemize}
 	\item Randomly delay the response. This essentially adds noise to the measurements of the adversary.
 	 
@@ -288,15 +298,16 @@ It is notoriously difficult to produce time-constant code. But two approaches ar
 Within the context of 6LoWPAN the second method is recommended as most 6LoWPAN application would tolerate missing packets and timer is available on most platforms. However, the threshold must be carefully chosen to preserve the functionality of the 6LoWPAN application.
 
 
-\section{Conclusion}
 
-\appendix
 
-And this is my Appendix.
 
-\subsection*{Appendix Subsection}
+%\appendix
 
-Some text.
+%And this is my Appendix.
+
+%\subsection*{Appendix Subsection}
+
+%Some text.
 
 %\nocite{*} % add all entries from sample.bib
 

@@ -1,17 +1,33 @@
 \section{A Typical IoT Protocol Stack}
 %A typical sensor network is built as described in \ref{Protocols}.
+%IoT Protocols
+Many protocols are proposed for different IoT applications adapting to various requirements. For example, some smart houses simply use WiFi for connectivity and VANETs\footnote{Vehicular ad hoc networks} may adopt DSRC\cite{DSRC}. 
+
+%WSN Protocols
+In this paper we focused on 6LoWPAN\cite{rfc4944} which is based on 802.15.4\cite{802154}. These standards are designated for constrained environments such as Wireless Sensor Networks,  but other competing standards exist at different layers. Bluetooth Low Energy(BLE)\cite{BLE} is a strong competitor to 802.15.4 as well as the LiFi\cite{LiFi} technology. Zigbee\cite{Zigbee} is originally intended as a collective protocol over 802.15.4 but it has been recently adapted for IP-based network as well in \cite{ZigbeeIp} in order to compete with 6LoWPAN. The RIME stack\cite{RIME} proposed a set of non-layered primitive over 802.15.4 but it is likely to be phased-out probably due to the reluctance of interoperability with TCP/IP protocol stack of Internet. 
+
+%6LoWPAN OS
+6LoWPAN is supported by several competing IoT Operating Systems, including Contiki OS\cite{Contiki}, OpenWSN\cite{OpenWSN}, FreeRTOS\cite{FreeRTOS} and the latest RIOT\cite{RIOT}. Contiki OS is chosen for our experiments for its customisability.
+
+\subsection{Our experimental network}
+%Say something about devices, and choice of OS, etc.
+%Hardware
+Our experiment networks are constructed using hardware of TelosB\cite{TelosB} and CC2538\cite{CC2538}. TelosB is a low cost sensor powered by MSP430 with AES co-processor representing the low-end devices. CC2538 is the high end device powered by ARM Cortex-M3 with multiple cryptographic processors including AES, RSA, SHA-2 and ECC, suggesting for security usage.
+%Should I cite our previous paper...?
+
+%Software
+On the software aspect, we by principle adopted the default settings of Contiki OS, except enabling the 802.15.4 Security upon its study. For Layer 4\cite{OSI} and above protocols, we considered the widely accepted combination of CoAP over DTLS(optional) over UDP\footnote{CoAPs is equivalent to CoAP over DTLS.}. \Cref{Protocols} summarises our choice of protocol stack in a simplified OSI\cite{OSI} model.
 
 \begin{table}[!h]
 	\centering
 	\input{tbl/protocols.tex}
-	\caption{Protocol stack for sensor networks. (* are optional.)\label{Protocols}}
+	\caption{Protocol stack for our experiments(* is optinal)\label{Protocols}}
 \end{table}
-
 
 %\begin{itemize}
 %	\item Security options in 6LoWPAN: 802.15.4 Security and DTLS.
 %	\item Eavesdropping is easier for 6LoWPAN.
 %\end{itemize}
 
-\subsection{Our experimental network}
-%Say something about devices, and choice of OS, etc.
+%Avaible security options.
+
