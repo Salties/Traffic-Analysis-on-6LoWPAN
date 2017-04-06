@@ -1,4 +1,6 @@
 \section{Packet Length}
+
+
 Packet length is proven to be a major leakage source in Internet traffic analysis attacks. Since neither 802.15.4 Security nor DTLS protects packet length, we expect the same attacks would apply to 6LoWPAN traffic as well. Further more, we suppose 6LoWPAN applications are even more vulnerable to the leakage as there tends to be less noise in the traffic.
 
 Unreliable transmission is more preferable for 6LoWPAN applications for its low cost. Take UDP, the symbolic protocol for unreliable transmission, for example. UDP has no flow control; therefore packet size as well as number of packets are deterministic given the same application data. This effectively removed the natural noise induced by TCP packet reassembling. Although packet fragmentation is also provided by IPv6 but this feature is usually disabled for practical reasons.
