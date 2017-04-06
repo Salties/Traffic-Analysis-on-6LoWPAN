@@ -1,2 +1,10 @@
 \subsection{Related Work}
 %Write about attacks that exploit packet length and response times in the context of TCP/IP. Reflect on web applications and how the same might happen if more interesting applications might be deployed that involve IoT objects.
+
+%Literatures about Traffic Analysis...
+Traffic Analysis is well studied in the context of encrypted Internet traffic, especially for web applications based on HTTPs and TCP/IP. \cite{WebSidechannel} summarised different side channel attacks against web applications and \cite{SuggestBox} studied the practicability of an attack specifically targeted Google and Bing search boxes. \cite{PinpointWeb} proposed the use of Mutual Information to pinpoint the potential leakage points in web traffic. For non-HTTPs applications, \cite{AppleMsg}, \cite{Language} and \cite{VideoTraffic} described attacks against encrypted text, voice and video traffic respectively. Machine learning is widely used to analyse the traffic and behaviours of different classifiers are studied by \cite{HClassifier} and \cite{Peekaboo}. It turns out that packet lengths and response times are the most exploited features among all attacks. Different countermeasures are studied by \cite{TrafficMorphing}, \cite{HTTPOS} and \cite{FTE}.
+
+Reflecting to IoT applications, most of the attacks may still be applicable exploiting the same features of packet length and response time, as we intend to demonstrate in this paper. Considering the future vision that IoT devices could be connected to the Internet with even more sensitive data flowing over different networks, the task of designing secure IoT applications poses to be ever challenging.
+
+%Literatures about 6LoWPAN security
+With regard to the aspect of protocol design, \cite{6LoWPANAtk} summarised some known flaws of 6LoWPAN, including Fragmentation Attack\cite{FragAtk}, Sinkhole Attack\cite{Sinkhole}, Hello Flood Attack\cite{HelloFlood}, Wormhole Attack\cite{Wormhole} and Blackhole Attack\cite{Blackhole}. In addition, \cite{802154SecIssues} reported certain problematic designs in 802.15.4 security\cite{802154}.
