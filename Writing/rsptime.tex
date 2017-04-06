@@ -63,7 +63,9 @@ A more general leakage is the response latency to a specific message, as differe
 %	\item Not for 802.15.4: adversary can't join the network.
 %	\item For DTLS: PING is available and confirmed. DTLS Heartbeat should work if supported.
 %\end{itemize}
-The response time of packets could also be exploited to fingerprint the code running on a specific device. 
+The program executing on the target is a valuable information in aspect of security and privacy, as it determines functionality of a device and therefore the contents of encrypted packets associated. For instance, knowing a target being an actuator that controls an air conditioner immediately suggests a packet directed to it might  be a controlling command.
+
+Our study shows that the response time of packets could also be exploited to reveal information of the program target is executing. To be more specifically, an adversary can collect ``fingerprints'', which we explain in the following section, from products available on the market and then use this information to breach the program running on a target device.
 
 \subsubsection{Hypothesis}
 %How it works
