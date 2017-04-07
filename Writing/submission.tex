@@ -44,14 +44,14 @@ where sensors monitor wellbeing. A future in which sensors and other (small) dev
 %\keywords{6LoWPAN, Side Channels, Traffic Analysis}
 
 \section{Introduction}
-The expression `Internet of Things' (IoT) can refer to a multitude of objects and protocols, which share that they have been purposefully designed for resource constraint environments. Whereas the typical TCP/IP network stack produces considerable overhead to achieve quality of service for applications that are based on it, the nature of many IoT `things' is such that a full implementation of it would not be practical. Often `things' are sensor, which are devices that have to function on little resources (most importantly power). Thus a whole host of new networking protocols have been developed over the years to cater for such resource constrained devices: 6LoWPAN is the `tiny' version of IPv6, UDP tends to be used instead of TCP/IP, DTLS can be used for end-to-end security or one can directly invoke 802.15.4. security which is part of 6LoWPAN, and finally CoAP(s) is the replacement for HTTP(s). Thus there are two options (802.15.4, and DTLS) to secure communications between the `things' and a server/gateway. 
+The expression `Internet of Things' (IoT) can refer to a multitude of objects and protocols, which share that they have been purposefully designed for resource constraint environments. Whereas the typical TCP/IP network stack produces considerable overhead to achieve quality of service for applications that are based on it, the nature of many IoT `things' is such that a full implementation of it would not be practical. Often `things' are sensor, which are devices that have to function on little resources (most importantly power). Thus a whole host of new networking protocols have been developed over the years to cater for such resource constrained devices: 6LoWPAN is the `tiny' version of IPv6, UDP tends to be used instead of TCP/IP, DTLS can be used for end-to-end security or one can directly invoke 802.15.4 Security which is part of 6LoWPAN, and finally CoAP(s) is the replacement for HTTP(s). Thus there are two options (802.15.4, and DTLS) to secure communications between the `things' and a server/gateway. 
 
-Implementing cryptography correctly and securely has proven to be a massive challenge as evidenced by the multitude of implementation attacks over the years. Triggered off by research that showed how to utilise additional information via timing and power side channels (CITE Kocher), many different flavours of side channel attacks were discovered over the last decade. Many attacks use phyiscal information (such as low level execution timings or power consumption) to recover secret keys, but many other attacks use protocol level information (such as packet lengths, types of packets or protocol messages) to recover information about plaintexts, devices in the network, or the network itself. 
+Implementing cryptography correctly and securely has proven to be a massive challenge as evidenced by the multitude of implementation attacks over the years. Triggered off by research that showed how to utilise additional information via timing and power side channels\cite{DPA}, many different flavours of side channel attacks were discovered over the last decade. Many attacks use phyiscal information (such as low level execution timings or power consumption) to recover secret keys, but many other attacks use protocol level information (such as packet lengths, types of packets or protocol messages) to recover information about plaintexts, devices in the network, or the network itself. 
 There exists a considerable body of work in the context of conventional, i.e. HTTPs over TCP/IP network, but the applicability of (some) of these attacks in the context of a typical IoT protocol stack is lacking. This is the gap that we would like to address within this submission. 
 
-This paper is structured as follows: after reviewing some relevant attack paths for HTTPs over TCP/IP in the following subsection, we provide a brief introduction to the necessary protocol and network features in Section XXX.  We discuss the impact of packet length leakage in Section XX, followed by an analysis of the response time leakage in Section YY. We summarise our work in Section ZZ. 
+This paper is structured as follows: after reviewing some relevant attack paths for HTTPs over TCP/IP in the following subsection, we provide a brief introduction to the necessary protocol and network features in \Cref{sec: IotProtocols}.  We discuss the impact of packet length leakage in \Cref{sec: PacketLen}, followed by an analysis of the response time leakage in \Cref{sec: ResponseTime}. We summarise our work in \Cref{sec: Conclusion}. 
 
-\subsection{Related Work}
+\subsection{Related Work\label{subsec: RelatedWork}}
 %Write about attacks that exploit packet length and response times in the context of TCP/IP. Reflect on web applications and how the same might happen if more interesting applications might be deployed that involve IoT objects.
 
 %Literatures about Traffic Analysis...
@@ -84,11 +84,11 @@ With regard to the aspect of protocol design, the recent paper \cite{6LoWPANAtk}
 %Say something about devices, and choice of OS, etc.
 
 
-\section{Exploiting Packet Length Information}
+\section{Exploiting Packet Length Information\label{sec: PacketLen}}
 
-As our brief survey of traffic analysis via exploiting packet lengths showed in Sect. YY, the packet length has proven to be a powerful side channel for the classical Internet protocols. It is worth noting that this side channel is `noisy' in the classical Internet setting: websites or web applications in this setting typically feature advertisements, which impact on packet lengths; TCP/IP allows to fragment packets and the reassembles them, a feature which is not present in UDP. Thus, due to the nature of UDP exploiting the packet length as side channel should be easier in the IoT setting.
+As our brief survey of traffic analysis via exploiting packet lengths showed in \Cref{subsec: RelatedWork}, the packet length has proven to be a powerful side channel for the classical Internet protocols. It is worth noting that this side channel is `noisy' in the classical Internet setting: websites or web applications in this setting typically feature advertisements, which impact on packet lengths; TCP/IP allows to fragment packets and then reassembles them, a feature which is not presented in UDP. Thus, due to the nature of UDP exploiting the packet length as side channel should be easier in the IoT setting.
 
-Clearly then, any web application style implementations involving an IoT device will thus be extremely vulnerable to attacks such as CITE. In the absence of this scenario for state-of-the art IoT applications, it still sends a cautionary warning to developers: binary responses (e.g. `yes' vs. `no', or `on' vs. `off') must always be coded via a binary variable and not via strings because these will have different lengths, which are directly visible via the packet length.
+Clearly then, any web application style implementations involving an IoT device will thus be extremely vulnerable to attacks such as \cite{WebSidechannel}. In the absence of this scenario for state-of-the art IoT applications, it still sends a cautionary warning to developers: binary responses (e.g. `yes' vs. `no', or `on' vs. `off') must always be coded via a binary variable and not via strings because these will have different lengths, which are directly visible via the packet length.
 
 In the remainder of this section we will highlight further problems that arise if packet lengths leak information.
 
@@ -102,14 +102,14 @@ The Internet Control Message Protocol(ICMP)\cite{rfc4443} performs the managemen
 	\item \textbf{DAG Information Solicitation (DIS)} \\
 	DIS is sent by a newly started node to probe any existing 6LoWPANs. A DIO would be replied if the DIS is received by any neighbour nodes.
 	\item \textbf{Destination Advertisement Object (DAO)} \\
-	DAO is sent by a child node to its precedents (The 6LoWPAN DODAG topology is defined in \cite{rfc6550}). to propagate its routing information.
+	DAO is sent by a child node to its precedents (The 6LoWPAN DODAG topology is defined in \cite{rfc6550}) to propagate its routing information.
 	\item \textbf{Neighbour Solicitation (NS) and Neighbour Advertisement (NA)} \\
 	NS and NA are the ARP replacement in IPv6, where NS queries a translation and NA answers one. In addition, they are also used for local link validity check.
 	\item \textbf{Echo Request and Echo Response (PING)} \\
 	Echo Request and Echo Response are well known as the PING packets. They are mostly used for diagnostic purposes, such as connectivity test or Round Trip Time (RTT) estimation. Echo Request may contain arbitrary user defined data and Echo Response simply echoes its corresponding request.
 \end{itemize}
 
-Generally, ICMP messages can be protected by either using the secure ICMP messages (WHAT ARE THESE, REFERENCE!), or relying on the lower layer encryption provided by 802.15.4. Contiki OS does not have the former implemented, hence 802.15.4 security is the only option currently. We simulated a 6LoWPAN network with 802.15.4 security enabled (we chose the strongest encryption). We configured the nodes to also generate random UDP packets. Despite the fact that all ICMP messages were encrypted, our experiments show that several ICMP messages can be identified by their packet size and MAC destination. Table \ref{IcmpPacketFeature} summarises the packet features. The value $x$ denotes the size of user defined data in bytes.
+Generally, ICMP messages can be protected by either using the secure ICMP messages as described in \cite{rfc4443}, or relying on the lower layer encryption provided by 802.15.4. Contiki OS does not have the former implemented, hence 802.15.4 security is the only option currently. We simulated a 6LoWPAN network with 802.15.4 security enabled (with strongest encryption and authentication). We configured the nodes to also generate random UDP packets. Despite the fact that all ICMP messages were encrypted, our experiments show that several ICMP messages can be identified by their packet size and MAC destination. \Cref{IcmpPacketFeature} summarises the packet features. The value $x$ denotes the size of user defined data in bytes.
 
 \begin{table}
 	\center
@@ -125,10 +125,11 @@ Similarly, unicast DIO can be identified as the 123 bytes packet followed by DIS
 
 In summary, among all the packets, DAO, NA, NS, DIS can be identified with certainty. DIO and PING cannot be certainly identified by they both have significant characters. Notice that the above contained all ICMPv6 messages supported by Contiki; therefore UDP packets can be reversely filtered, although in some cases the get mixed with DIO and PING.
 
-Although leakage in ICMP messages does not directly lead to any breach of application data, it would still be harmful by providing the adversary with information about the state of the network, including which nodes recently joined etc. 
+Although leakage in ICMP messages does not directly lead to any breach of application data, it would still be harmful by providing the adversary with information about the state of the network, including which nodes recently joined etc. Specifically DAO is always sent from a child to its parent and can be uniquely identified; therefore together with MAC addresses the adversary may exploit it to draw a graph that shows the parental relations in the network.
 
-TODO: why would you get the network topology (do you mean via observing the different MAC addresses alongside what they send out)? AFter all the payload is still encrypted and so you don't see the actual DAO for instance??
-
+%\textbf{
+%TODO: why would you get the network topology (do you mean via observing the different MAC addresses alongside what they send out)? AFter all the payload is still encrypted and so you don't see the actual DAO for instance??
+%}
 \subsection{Distinguishing Different Devices}
 %Gain hardware information.
 %\begin{itemize}
@@ -136,19 +137,19 @@ TODO: why would you get the network topology (do you mean via observing the diff
 %	\item Works on both 802.15.4 Security and DTLS.
 %\end{itemize}
 
-In the classical Internet world, ICMP has been well known for its use for OS fingerprinting (CITATION NEEDED). In the case of the IoT, this could be possible as well (as different OS support different subsets of ICMP), however an additional attack vector exists. This is because different IoT devices have different hardware limitations or drivers. We noticed that our TelosB\cite{TelosB} discards all packets exceeding 127 bytes\footnote{MTU specified by 802.15.4 standard.} whereas our CC2538 handles packets even up to 160 bytes. Therefore an adversary can immediately rule out TelosB whenever a packet larger than 127 bytes processed by the target.
+In the classical Internet world, ICMP has been well known for its use for OS fingerprinting\cite{OsFingerprint}. In the case of the IoT, this could be possible as well (as different OS support different subsets of ICMP), however an additional attack vector exists. This is because different IoT devices have different hardware limitations or drivers. We noticed that our TelosB\cite{TelosB} discards all packets exceeding 127 bytes\footnote{MTU specified by 802.15.4 standard.} whereas our CC2538 handles packets even up to 160 bytes. Therefore an adversary can immediately rule out TelosB whenever a packet larger than 127 bytes processed by the target.
 
 
-\section{Exploiting Response Time Information}
+\section{Exploiting Response Time Information\label{sec: ResponseTime}}
 
 The response time is another major feature that has been previously exploited in Internet traffic analysis attacks. Like in the case of exploiting packet lengths, we would expect that the same attacks (as in the classical Internet setting) can be applied to 6LoWPAN traffic. Indeed, like in the previous section, we would expect that they will work even better because the accuracy of timing measurements can be greatly improved for 6LoWPAN traffic: this is because there are fewer noise sources in the traffic, the devices are physically close to each other and uses RF to communicate, the adversary can remove the RTT noises by measure the packets on the server side, and the performance of the constrained devices is low and hence gives a better resolution of the execution time.
 
 \subsection{Distinguishing Different Sensors}
 The first application of timing analysis that we describe is to distinguish between different sensors that are accessed on a device. For this purpose we set up an experiment on a CC2538, which has three on-board sensors: Vdd, temperature, and an Ambient Light Sensor (short ALS). We access these via CoAP\cite{rfc7252}, which is a protocol designed for constrained devices that provides an universal interface for accessing resources. CoAPs is the secure version which stands for CoAP with DTLS.
 
-Due to the different physical characteristics of the sensors, there could be a variance of time that is required to reading the measurements. We investigated whether such variances could be observed through the packet response latency. If this was the case, then an adversary could learn the nature/purpose of sensors on a network by observing their response time. 
+Due to the different physical characteristics of the sensors, there could be a variance of time that is required for reading the measurements. We investigated whether such variances could be observed through the packet response latency. If this was the case, then an adversary could learn the nature/purpose of sensors on a network by observing their response time. 
 
-We implemented thus set up an experiment on CC2538, using all three sensors from ``cc2538-demo". We used CoAP from the ``er-rest-example" in the Contiki OS source code, as there is no CoAPs implementation available. Although DTLS processing would definitely have an impact on the response latency, we argue that such impact would be independent to the sensors being accessed; hence similar result will hold equally for CoAPs. We carefully controlled for other factors, including URIs, data representation and code flow, to be uniform for all three sensors in order to guarantee a controlled environment.
+We implemented thus set up an experiment on CC2538, using all three sensors from ``cc2538-demo". We used CoAP from the ``er-rest-example" in the Contiki OS source code, as there is no CoAPs implementation available. Although DTLS processing would definitely have an impact on the response latency, we argue that such impact would be independent to the sensors being accessed; hence similar result will hold equally for CoAPs. We carefully controlled other factors, including URIs, data representation and code flow, to be uniform for all three sensors in order to guarantee a controlled environment.
 
 \begin{table}
 	\center
@@ -156,7 +157,7 @@ We implemented thus set up an experiment on CC2538, using all three sensors from
 	\caption{CoAP Response Latency for Sensor Readings on CC2538\label{CoapTiming}}
 \end{table}
 
-Table \ref{CoapTiming} summarises the result. It shows that ALS takes about $2$ms longer and hence can be easily distinguished. Vdd and temperature have much more strongly overlapping distributions, and thus are more difficult to distinguish. Nevertheless these results show that our hypothesis holds: different sensors have different latencies and these leak through the response time. An adversary who is interested in finding out information about devices on a network might thus be able to match the (known) behaviour of `interesting' sensors to what they observe on the network. We remark that this could be useful even in the setting where the sensors transmit their data unencrypted: after all they might return only some reading without a unit of measurement; thus seeing their return data might not as such reveal their nature. 
+\Cref{CoapTiming} summarises the result. It shows that ALS takes about $2$ms longer and hence can be easily distinguished. Vdd and temperature have much more strongly overlapping distributions, and thus are more difficult to distinguish. Nevertheless these results show that our hypothesis holds: different sensors have different latencies and these leak through the response time. An adversary who is interested in finding out information about devices on a network might thus be able to match the (known) behaviour of `interesting' sensors to what they observe on the network. We remark that this could be useful even in the setting where the sensors transmit their data unencrypted: after all they might return only some reading without a unit of measurement; thus seeing their return data might not as such reveal their nature. 
 
 
 \subsection{Distinguishing Different Devices}
@@ -179,7 +180,7 @@ As we observed before, different devices have different underlying hardware and 
 	\caption{PING Response Latency\label{PingResponse}}
 \end{table}
 
-Table \ref{PingResponse} shows the PING response latency on CC2538 and TelosB. The result confirms that these devices can be distinguished by PING response latency.
+\Cref{PingResponse} shows the PING response latency on CC2538 and TelosB. The result confirms that these devices can be distinguished by PING response latency.
 
 
 \subsection{Distinguishing Programs}
@@ -199,7 +200,7 @@ We remarked before that the functionality of a sensor is potentially valuable in
 
 
 %How it works
-To illustrate why this might work, we now look at Figure\ref{FingerprintTheory}. It illustrates two sensors receiving the same service request. In our example, st the time of receiving the request, Sensor Node 1 was idle and hence responded immediately, whilst Sensor Node 2 postponed the request for reading a sensor. Clearly, the response time on Sensor Node 2 would appear longer than that of Sensor Node 1.
+To illustrate why this might work, we now look at \Cref{FingerprintTheory}. It illustrates two sensors receiving the same service request. In our example, at the time of receiving the request, Sensor Node 1 was idle and hence responded immediately, whilst Sensor Node 2 postponed the request for reading a sensor. Clearly, the response time on Sensor Node 2 would appear longer than that of Sensor Node 1.
 
 \begin{figure}
 	\center
@@ -210,14 +211,14 @@ To illustrate why this might work, we now look at Figure\ref{FingerprintTheory}.
 In real life, most sensors are programmed in a loop; therefore the same code fragments are repeated through the life time of a sensor. Each code fragment takes different time to execute and hence the response times vary. This behaviour could be statistically analysed and the resulting distribution could be stored as a `fingerprint' .
 
 
-For this fingerprinting scenario, we must assume the adversary has the pre-knowledge of potential programs and can fingerprint them (or that they have access to a database that contains this information). To identify an unknown program running on target sensor, the adversary collects a new fingerprint and then matches it to available fingerprints. Clearly, to effectively launch the attack, the adversary needs to be able to send the request to a targeted sensor (equests with short predictable processing time are preferable as they induce less noise). 
+For this fingerprinting scenario, we must assume the adversary has the pre-knowledge of potential programs and can fingerprint them (or that they have access to a database that contains this information). To identify an unknown program running on target sensor, the adversary collects a new fingerprint and then matches it to available fingerprints. Clearly, to effectively launch the attack, the adversary needs to be able to send the request to a targeted sensor (requests with short predictable processing time are preferable as they induce less noise). 
 
 In practice, the request can be instantiated by several messages defined in the sensor network protocols. PING is exceptionally ideal as it is mandatory in the ICMP standard\cite{rfc4433} and has only negligible computation. Other options but not excluded are Heartbeat in DTLS\cite{rfc6520}, Reset in CoAP\cite{rfc7252}, etc.
 
 \subsubsection{Extracting Fingerprints}
 We explored the feasibility of fingerprinting programs on an CC2538 running Contiki OS by using the PING command.
 
-Figure \ref{ExamplePri} shows an example of captured packets. Contiki MAC\cite{ContikiMAC} sends duplicated PING requests. The response time, which refers to PING Response Interval, PRI, is defined to be the time between a PING response and its last paired request. The highlighted Packets 205 and 203 shows such an example.
+\Cref{ExamplePri} shows an example of captured packets. Contiki MAC\cite{ContikiMAC} sends duplicated PING requests. The response time, which refers to PING Response Interval, PRI, is defined to be the time between a PING response and its last paired request. The highlighted Packets 205 and 203 shows such an example.
 
 \begin{figure}[!h]
 	\centering
@@ -227,7 +228,7 @@ Figure \ref{ExamplePri} shows an example of captured packets. Contiki MAC\cite{C
 
 %Since the attack extracts the information contained in the extended response time of a specific request, the first problem is to see whether such extended response time can be filtered from normal ones. 
 
-Figure \ref{HelloworldPriNormal} shows the histogram of PRIs collected on the ``helloworld'' example from Contiki OS. Values $\geq$12ms are collected at 12ms. The result shows that most PRIs are clustered around 9.5ms which consists with our result in \ref{PingResponse}. The majority, roughly ranged [9.0, 10.3]ms, corresponds to the usual response time as depicted by Sensor Node 1 in \ref{FingerprintTheory}. 
+\Cref{HelloworldPriNormal} shows the histogram of PRIs collected on the ``helloworld'' example from Contiki OS. Values $\geq$12ms are collected at 12ms. The result shows that most PRIs are clustered around 9.5ms which consists with our result in \Cref{PingResponse}. The majority, roughly ranged [9.0, 10.3]ms, corresponds to the usual response time as depicted by Sensor Node 1 in \Cref{FingerprintTheory}. 
 
 \begin{figure}[!h]
 	\centering
@@ -242,9 +243,9 @@ Figure \ref{HelloworldPriNormal} shows the histogram of PRIs collected on the ``
 	\caption{helloworld PRIs\label{HelloworldPri}}
 \end{figure}
 
-We further plotted the upper outliers, mostly ranged [12, 2000]ms, in \ref{HelloworldPriOutliers}. We suppose these outliers correspond to the extended response time as depicted by Sensor Node 2 in \ref{FingerprintTheory}. The distribution described by \ref{HelloworldPriOutliers} is the fingerprint of the ``helloworld'' example.
+We further plotted the upper outliers, mostly ranged [12, 2000]ms, in \Cref{HelloworldPriOutliers}. We suppose these outliers correspond to the extended response time as depicted by Sensor Node 2 in \Cref{FingerprintTheory}. The distribution described by \Cref{HelloworldPriOutliers} is the fingerprint of the ``helloworld'' example.
 
-The result in Figure \ref{HelloworldPri} shows a clear gap between the usual PRIs and extended PRIs. In fact other applications we experimented also showed the same property. This implies that an adversary can easily draw a threshold by observing the whole PRI distribution and then filter out the fingerprint. In our experiments the threshold is set to 12ms but any other values within the gap would also work. 
+The result in \Cref{HelloworldPri} shows a clear gap between the usual PRIs and extended PRIs. In fact other applications we experimented also showed the same property. This implies that an adversary can easily draw a threshold by observing the whole PRI distribution and then filter out the fingerprint. In our experiments the threshold is set to 12ms but any other values within the gap would also work. 
 
 We collected the fingerprints for three programs taken from the Contiki OS examples:
 \begin{description}
@@ -252,23 +253,23 @@ We collected the fingerprints for three programs taken from the Contiki OS examp
 	 
 	\item[powertrace] This program records the power consumption and broadcasts a constant message.
 	
-	\item[Sensorpayload] This program is based on the ``er-rest-example'' embedded together with sensor accesses taken from ``cc2538-demo''. It captures a real case scenario where three different sensors, namely Temperature, VDD and ALS, are being access through CoAP.
+	\item[Sensorpayload] This program is based on the ``er-rest-example'' embedded together with sensor accesses taken from ``cc2538-demo''. It captures a real case scenario where three different sensors, namely Temperature, VDD and ALS, are being accessed through CoAP.
 \end{description}
 
 Specifically for ``Sensorpayload'' we collected fingerprints for 8 different scenarios where different sensors are being accessed. For each program we independently collected 2 fingerprints for comparison.
 
-Figure \ref{FingerprintApps} summarises the total 20 fingerprints we collected for the experiment.
+\Cref{FingerprintApps} summarises the total 20 fingerprints we collected for the experiment.
 
 \subsubsection{Fingerprint Matching}
 %Comparing the distribution.
 
-During the experiments we realised that most of the fingerprints do not adhere to common distributions; therefore we used non parametric test, the Kolmogorov-Smirnov Distance (REFERENCE NEEDED), as our test statistic. \ref{ksdistances} summarises the relative KS distances computed on each pair of fingerprints in our experiments.
+During the experiments we realised that most of the fingerprints do not adhere to common distributions; therefore we used non parametric test, the Kolmogorov-Smirnov Distance\cite{KsTest}, as our test statistic. \Cref{ksdistances} summarises the relative KS distances computed on each pair of fingerprints in our experiments.
 
-Although fingerprints collected on the same application were rejected by the Kolmogorov-Smirnov Test, we noticed that their KS distance tends to be smaller comparing to fingerprints collected on different programs, as the \textbf{bold} cells marked in Figure \ref{ksdistances}. 
+Although fingerprints collected on the same application were rejected by the Kolmogorov-Smirnov Test, we noticed that their KS distance tends to be smaller comparing to fingerprints collected on different programs, as the \textbf{bold} cells marked in \Cref{ksdistances}. 
 
 By adapting our distinguisher to utilise the minimum KS distance, we were able to identify 13 out of 20 fingerprints successfully. The `overlapping' fingerprints are mainly due to the ``Sensorpayload'' program, which access different sensors, but otherwise has identical program code. Thus we did expect that the different instantiations of it would lead to very similar fingerprints. 
 
-\section{Conclusion}
+\section{Conclusion\label{sec: Conclusion}}
 
 In this paper we explore, for the first time, the use of packet lengths and response times, which are protocol level side channels, as means to recover information about IoT `things'. We do this via some experiments, which we base on two extremely popular devices running on a popular open source OS, with a typical stack of protocols. Whilst we do not cover a wide range of devices, the fact that two of the most popular devices show the characteristics that we hypothesise, gives credibility to our results. Our results show that it is possible (in principle) to recover information about a device and its function (i.e. the hardware and the software that runs on it) via inspecting encrypted traffic that it produces. We also point out that ICMP messages can be distinguished from each other despite the use of encryption. 
 
@@ -293,7 +294,7 @@ In order to mitigate the leakage given by response times, the natural countermea
 \begin{itemize}
 	\item Randomly delay the response. This essentially adds noise to the measurements of the adversary.
 	 
-	\item Use a threshold response time, i.e. a request is either responded at a predefined time or not responded to at all. 
+	\item Use a threshold response time, i.e. a request is either responded at a predefined time or not responded at all. 
 \end{itemize}
 Within the context of 6LoWPAN the second method is recommended as most 6LoWPAN application would tolerate missing packets and timer is available on most platforms. However, the threshold must be carefully chosen to preserve the functionality of the 6LoWPAN application.
 
