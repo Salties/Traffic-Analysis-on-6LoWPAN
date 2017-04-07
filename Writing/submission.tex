@@ -36,18 +36,18 @@
 %\runningauthor{Y. Yan}
 
 \subsection*{Abstract}
-The Internet of Things has become a reality: small connected devices feature in everyday objects
+The Internet of Things (IoT) has become a reality: small connected devices feature in everyday objects
 including childrens' toys, TVs, fridges, heating control units, etc. Supply chains feature sensors
 throughout, and significant investments go into researching next-generation healthcare, 
-where sensors monitor wellbeing. A future in which sensors and other (small) devices interact to create sophisticated applications seems just around the corner . All of these applications have a fundamental need for security and privacy and thus we need to deploy cryptography as part an attempt to secure them. In this paper we explore a particular type of flaw, namely side channel information, on the protocol level. Our research investigates the potential for utilising packet length and timing information (both are easily obtained) to extract interesting information from a system, despite the use of cryptography. 
+where sensors monitor wellbeing. A future in which sensors and other (small) devices interact to create sophisticated applications seems just around the corner. All of these applications have a fundamental need for security and privacy and thus cryptography is deployed as part of an attempt to secure them. In this paper we explore a particular type of flaw, namely side channel information, on the protocol level that can exist despite the use of cryptography. Our research investigates the potential for utilising packet length and timing information (both are easily obtained) to extract interesting information from a system. We find that using these side channels we can distinguish between devices, different programs running on the same device including which sensor is accessed. We also find it is possible to distinguish between different types of ICMP messages despite the use of encryption. Based on our findings, we provide a set of recommendations to efficiently mitigate these side channels in the IoT context. 
 
 %\keywords{6LoWPAN, Side Channels, Traffic Analysis}
 
 \section{Introduction}
-The expression `Internet of Things' (IoT) can refer to a multitude of objects and protocols, which share that they have been purposefully designed for resource constraint environments. Whereas the typical TCP/IP network stack produces considerable overhead to achieve quality of service for applications that are based on it, the nature of many IoT `things' is such that a full implementation of it would not be practical. Often `things' are sensor, which are devices that have to function on little resources (most importantly power). Thus a whole host of new networking protocols have been developed over the years to cater for such resource constrained devices: 6LoWPAN is the `tiny' version of IPv6, UDP tends to be used instead of TCP/IP, DTLS can be used for end-to-end security or one can directly invoke 802.15.4 Security which is part of 6LoWPAN, and finally CoAP(s) is the replacement for HTTP(s). Thus there are two options (802.15.4, and DTLS) to secure communications between the `things' and a server/gateway. 
+The expression `Internet of Things' (IoT) can refer to a multitude of objects and protocols, which share that they have been purposefully designed for resource constraint environments. Whereas the typical TCP/IP network stack produces considerable overhead to achieve quality of service for applications that are based on it, the nature of many IoT `things' is such that a full implementation of it would not be practical. Often `things' are sensor, which are devices that have to function on little resources (most importantly power). Thus a whole host of new networking protocols have been developed over the years to cater for such resource constrained devices: 6LoWPAN is the `tiny' version of IPv6, UDP tends to be used instead of TCP/IP, DTLS can be used for end-to-end security or one can directly invoke 802.15.4 security which is part of 6LoWPAN, and finally CoAP(s) is the replacement for HTTP(s). Thus there are two options (802.15.4, and DTLS) to secure communications between the `things' and a server/gateway. 
 
 Implementing cryptography correctly and securely has proven to be a massive challenge as evidenced by the multitude of implementation attacks over the years. Triggered off by research that showed how to utilise additional information via timing and power side channels\cite{DPA}, many different flavours of side channel attacks were discovered over the last decade. Many attacks use phyiscal information (such as low level execution timings or power consumption) to recover secret keys, but many other attacks use protocol level information (such as packet lengths, types of packets or protocol messages) to recover information about plaintexts, devices in the network, or the network itself. 
-There exists a considerable body of work in the context of conventional, i.e. HTTPs over TCP/IP network, but the applicability of (some) of these attacks in the context of a typical IoT protocol stack is lacking. This is the gap that we would like to address within this submission. 
+There exists a considerable body of work in the context of conventional, i.e. HTTPs over TCP/IP network, but the applicability of (some) of these attacks in the context of a typical IoT protocol stack is lacking. This is the gap that we would like to address with this work. 
 
 This paper is structured as follows: after reviewing some relevant attack paths for HTTPs over TCP/IP in the following subsection, we provide a brief introduction to the necessary protocol and network features in \Cref{sec: IotProtocols}.  We discuss the impact of packet length leakage in \Cref{sec: PacketLen}, followed by an analysis of the response time leakage in \Cref{sec: ResponseTime}. We summarise our work in \Cref{sec: Conclusion}. 
 
@@ -60,29 +60,51 @@ Traffic Analysis is well studied in the context of encrypted Internet traffic, e
 Reflecting on IoT applications, we stipulate that most of these attacks may still be applicable, as we intend to demonstrate in this paper. Considering the future vision that IoT devices could be indeed connected to the Internet with even more sensitive data flowing over different networks, the task of designing secure IoT applications becomes increasingly challenging.
 
 %Literatures about 6LoWPAN security
-With regard to the aspect of protocol design, the recent paper \cite{6LoWPANAtk} summarised some known flaws of 6LoWPAN, including its susceptibility to the Fragmentation Attack\cite{FragAtk}, Sinkhole Attack\cite{Sinkhole}, Hello Flood Attack\cite{HelloFlood}, Wormhole Attack\cite{Wormhole} and Blackhole Attack\cite{Blackhole}. In addition, \cite{802154SecIssues} reported certain problematic designs in 802.15.4 security\cite{802154}. However we do not discuss further about these designing flaws as they lay into a different aspect of the security issues addressed by this paper.
+With regard to the aspect of protocol design, the recent paper \cite{6LoWPANAtk} summarised some known flaws of 6LoWPAN, including its susceptibility to the Fragmentation Attack\cite{FragAtk}, Sinkhole Attack\cite{Sinkhole}, Hello Flood Attack\cite{HelloFlood}, Wormhole Attack\cite{Wormhole} and Blackhole Attack\cite{Blackhole}. In addition, \cite{802154SecIssues} reported certain problematic designs in 802.15.4 security\cite{802154}. However we do not discuss further these particular design flaws as they touch on a different aspect of the security issues in 6LoWPAN compared to what we address in this paper.
 
-%\textbf{TODO: if space and time say some more about these attacks. At least say if they relate to the type of leakage we are exploiting or if they are completely independent (which is what I would guess). }
 
-\input{iotprotocols}
-%\section{A Typical IoT Protocol Stack}
-%A typical sensor network is built as described in \ref{Protocols}.
+\section{A Typical IoT Protocol Stack\label{sec: IotProtocols}} 
 
-%\begin{table}[!h]
-%	\centering
-%	\input{tbl/protocols.tex}
-%	\caption{Protocol stack for sensor networks. (* are optional.)\label{Protocols}}
-%\end{table}
+%IoT Protocols
+There are large number of protocols, which have been proposed for different IoT applications adapting to various requirements. For example, some smart houses simply use WiFi for connectivity and VANETs\footnote{Vehicular ad hoc networks} may adopt DSRC\cite{DSRC}. 
 
+%WSN Protocols
+In this paper we focus on 6LoWPAN\cite{rfc4944} which is based on the 802.15.4\cite{802154} standard. These standards are designated for constrained environments such as Wireless Sensor Networks,  but other competing standards exist at different layers. Bluetooth Low Energy(BLE)\cite{BLE} is a strong competitor to 802.15.4 as well as the LiFi\cite{LiFi} technology. Zigbee\cite{Zigbee} was originally intended as a collective protocol over 802.15.4 but it has been recently adapted to IP-based network in ZigbeeIP\cite{ZigbeeIp}. The RIME stack\cite{RIME} proposes a set of non-layered primitives over 802.15.4 but it is likely to be phased-out due to the lack of of interoperability with the TCP/IP protocol stack. 
+
+%6LoWPAN OS
+6LoWPAN thus is the most popular standard for low power networks, and thus it is supported by several competing IoT Operating Systems, including Contiki OS\cite{Contiki}, OpenWSN\cite{OpenWSN}, FreeRTOS\cite{FreeRTOS} and the recent RIOT\cite{RIOT}. We chose Contiki OS for our experiments because it is easy to customise.
+
+\subsection{Our experimental network}
+%Say something about devices, and choice of OS, etc.
+%Hardware
+Our experimental network is constructed using two different devices. These are a TelosB\cite{TelosB} and a CC2538\cite{CC2538}. The TelosB is a low cost sensor powered by an MSP430 with an AES co-processor. It represents typical low-end devices. The CC2538 is the high end device powered by an ARM Cortex-M3 with multiple cryptographic processors including AES, RSA, SHA-2 and ECC, suggesting that it is suitable to develop secure applications. %Should I cite our previous paper...?
+
+%Software
+Both devices are supported by the Contiki OS. We adopted the default settings of the Contiki OS, except for enabling 802.15.4 security\cite{802154} for some experiments. Note that the Contiki MAC\cite{ContikiMAC} is chosen by default over TSCH\cite{TSCH}. For Layer 4\cite{OSI} and above protocols, we went with the widely accepted combination of CoAP\cite{rfc7252}, and DTLS\cite{rfc6347}(optional) over UDP\cite{rfc768}\footnote{CoAPs is equivalent to CoAP over DTLS.}. \Cref{Protocols} summarises our choice of protocol stack.
+
+\begin{table}[!h]
+	\centering
+	\begin{tabular}{|c|c|}
+	\hline
+	Physical                        & \multirow{2}{*}{802.15.4} \\ \cline{1-1}
+	Link                          &                           \\ \hline
+	Network                       & 6LoWPAN                   \\ \hline
+	\multirow{2}{*}{Transmission} & UDP                       \\ \cline{2-2} 
+	                              & DTLS*                     \\ \hline
+	Application                   & CoAP / CoAPs*             \\ \hline
+	\end{tabular}
+
+	\caption{Protocol stack for our experiments(* is optinal)\label{Protocols}}
+\end{table}
 
 %\begin{itemize}
 %	\item Security options in 6LoWPAN: 802.15.4 Security and DTLS.
 %	\item Eavesdropping is easier for 6LoWPAN.
 %\end{itemize}
 
-%\subsection{Our experimental network}
-%Say something about devices, and choice of OS, etc.
-
+%Avaible security options.
+\subsubsection{802.15.4 and DTLS}
+In our setting, there are two standards available for packet encryption, namely 802.15.4 security\cite{802154} and DTLS\cite{rfc6347}. 802.15.4 security is provided by the noncoresec\cite{noncoresec} API, which implements 802.15.4 authenticated encryption with AES-128 CCM*\cite{CCM} using a hard-coded key shared by the whole 6LoWPAN network. We chose tinyDTLS\cite{tinydtls}  as library for the DTLS protocols, because it provides a minimum DTLS implementation that supports two ciphersuites which are TLS\_PSK\_WITH\_AES\_128\_CCM\_8\cite{rfc6655} and TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8\cite{rfc6655} respectively. Evidently, they both utilise AES-128 CCM* as the packet encryption method.
 
 \section{Exploiting Packet Length Information\label{sec: PacketLen}}
 
@@ -93,7 +115,7 @@ Clearly then, any web application style implementations involving an IoT device 
 In the remainder of this section we will highlight further problems that arise if packet lengths leak information.
 
 \subsection{Distinguishing ICMP Messages}
-The Internet Control Message Protocol(ICMP)\cite{rfc4443} performs the management tasks in a network, such as link establishment and routing information exchange. As explained before we utilise the open source system Contiki, which supports a (sub)set of the ICMP standard (we list the supported ICMP messages in the following). Many ICMP messages are ideal for network discovery and exploration, although the purpose of ICMP is to send error messages to the source IP address if standard IP packets fail to be transmitted correctly. 
+The Internet Control Message Protocol(ICMP)\cite{rfc4443} performs the management tasks in a network, such as link establishment and routing information exchange. As explained before we utilise the open source system Contiki, which supports a (sub)set of the ICMP standard (we list the supported ICMP messages further below). Many ICMP messages are ideal for network discovery and exploration, although the purpose of ICMP is to send error messages to the source IP address if standard IP packets fail to be transmitted correctly. 
 
 
 \begin{itemize}
@@ -119,13 +141,13 @@ Generally, ICMP messages can be protected by either using the secure ICMP messag
 
 %First of all, a DIS has the unique smallest packet size of 85 bytes, indicating it can be easily identified.
 
-Among the unicast packets, PING and UDP have at least 101 and 108 bytes\footnote{PING can be sent without user defined data and UDP packets requires at least 1 byte.}. Therefore, DAO can be uniquely identified as the shortest unicast packet of $97$ bytes.  For the same reason NA and unicast NS can also be distinguished from other packets by filtering packets of $87$ bytes. Considering that NA is sent as a response to NS according to the protocol, one can always identify the first being NS and second being NA. 
+Among the unicast packets, PING and UDP have at least 101 and 108 bytes\footnote{PING can be sent without user defined data and UDP packets requires at least 1 byte.}. Therefore, DAO can be uniquely identified as the shorter unicast packet of $97$ bytes.  For the same reason NA and unicast NS can also be distinguished from other packets by filtering packets of $87$ bytes. Considering that NA is sent as a response to NS according to the protocol, one can always identify the first being NS and second being NA. 
 
-Similarly, unicast DIO can be identified as the 123 bytes packet followed by DIS, where the later has a unique 85 byte size. However, there is a potential of false positive induced by carefully crafted PING or UDP packets. PING could be recognised by its pair-wised appearance, as the response would have nearly the same meta data as the original request, except the exchanged source and destination. For broadcast packets, DIS can be easily identified by its unique 85 bytes packet size. Others like broadcast NS can be identified by the followed characteristic NA response; and packets of 118 bytes those are periodically broadcasted are likely to be DIOs.
+Similarly, unicast DIO can be identified as the 123 bytes packet followed by DIS, where the later has a unique 85 byte size. However, there is a potential of false positive induced by PING or UDP packets with user defined data crafted to have the same packet length\footnote{22 bytes for PING and 16 bytes for UDP.}. PING could be recognised by its pair-wised appearance, as the response would have nearly the same meta data as the original request, except the exchanged source and destination. For broadcast packets, DIS can be easily identified by its unique 85 bytes packet size. Others like broadcast NS can be identified by the followed characteristic NA response; and packets of 118 bytes those are periodically broadcasted are likely to be DIOs.
 
-In summary, among all the packets, DAO, NA, NS, DIS can be identified with certainty. DIO and PING cannot be certainly identified by they both have significant characters. Notice that the above contained all ICMPv6 messages supported by Contiki; therefore UDP packets can be reversely filtered, although in some cases the get mixed with DIO and PING.
+In summary, among all the packets, DAO, NA, NS, DIS can be identified with certainty. DIO and PING cannot be certainly identified but they both have significant characters. Notice that the above contained all ICMPv6 messages supported by Contiki; therefore UDP packets can be reversely filtered, although in some cases they get mixed with DIO and PING.
 
-Although leakage in ICMP messages does not directly lead to any breach of application data, it would still be harmful by providing the adversary with information about the state of the network, including which nodes recently joined etc. Specifically DAO is always sent from a child to its parent and can be uniquely identified; therefore together with MAC addresses the adversary may exploit it to draw a graph that shows the parental relations in the network.
+Although leakage in ICMP messages does not directly lead to any breach of application data, it would still be harmful by providing the adversary with information about the state of the network, including which nodes recently joined etc. Specifically DAO is always sent from a child to its parent and can be uniquely identified; therefore together with MAC addresses the adversary may exploit it to draw a graph that shows the parental relations in the network. In addition, these information can also be exploited by attacks as in \cite{WsnIcmp}.
 
 %\textbf{
 %TODO: why would you get the network topology (do you mean via observing the different MAC addresses alongside what they send out)? AFter all the payload is still encrypted and so you don't see the actual DAO for instance??
@@ -149,7 +171,7 @@ The first application of timing analysis that we describe is to distinguish betw
 
 Due to the different physical characteristics of the sensors, there could be a variance of time that is required for reading the measurements. We investigated whether such variances could be observed through the packet response latency. If this was the case, then an adversary could learn the nature/purpose of sensors on a network by observing their response time. 
 
-We implemented thus set up an experiment on CC2538, using all three sensors from ``cc2538-demo". We used CoAP from the ``er-rest-example" in the Contiki OS source code, as there is no CoAPs implementation available. Although DTLS processing would definitely have an impact on the response latency, we argue that such impact would be independent to the sensors being accessed; hence similar result will hold equally for CoAPs. We carefully controlled other factors, including URIs, data representation and code flow, to be uniform for all three sensors in order to guarantee a controlled environment.
+We thus set up an experiment on CC2538, using all three sensors from ``cc2538-demo". We used CoAP from the ``er-rest-example" in the Contiki OS source code, as there is no CoAPs implementation available. Although DTLS processing would definitely have an impact on the response latency, we argue that such impact would be independent to the sensors being accessed; hence similar result can be equally expected for CoAPs. We carefully controlled other factors, including URIs, data representation and code flow, to be uniform for all three sensors in order to guarantee a controlled environment.
 
 \begin{table}
 	\center
@@ -157,7 +179,7 @@ We implemented thus set up an experiment on CC2538, using all three sensors from
 	\caption{CoAP Response Latency for Sensor Readings on CC2538\label{CoapTiming}}
 \end{table}
 
-\Cref{CoapTiming} summarises the result. It shows that ALS takes about $2$ms longer and hence can be easily distinguished. Vdd and temperature have much more strongly overlapping distributions, and thus are more difficult to distinguish. Nevertheless these results show that our hypothesis holds: different sensors have different latencies and these leak through the response time. An adversary who is interested in finding out information about devices on a network might thus be able to match the (known) behaviour of `interesting' sensors to what they observe on the network. We remark that this could be useful even in the setting where the sensors transmit their data unencrypted: after all they might return only some reading without a unit of measurement; thus seeing their return data might not as such reveal their nature. 
+\Cref{CoapTiming} summarises the result. It shows that ALS takes about $2$ms longer and hence can be easily distinguished. Vdd and temperature have much more strongly overlapping distributions, and thus are more difficult to distinguish. Nevertheless these results confirm  our hypothesis: different sensors have different latencies and these leak through the response time. An adversary who is interested in finding out information about devices on a network might thus be able to match the (known) behaviour of `interesting' sensors to what they observe on the network. We remark that this could be useful even in the setting where the sensors transmit their data unencrypted: after all they might return only some reading without a unit of measurement; thus seeing their return data might not as such reveal their nature. 
 
 
 \subsection{Distinguishing Different Devices}
@@ -192,7 +214,7 @@ As we observed before, different devices have different underlying hardware and 
 %	\item For DTLS: PING is available and confirmed. DTLS Heartbeat should work if supported.
 %\end{itemize}
 
-We remarked before that the functionality of a sensor is potentially valuable information. For instance some sensors might be predominantly passive, e.g. they might read the temperature and report it back periodically, whereas some sensors might control something upon receiving commands. Thus knowing the functionality enables an adversary to make (more) sense of the observed traffic in the network. This could be done if a `fingerprint' could be produced for different programs. From an adversaries perspective a positive result would imply that they could `fingerprint' products which are on the market and thus use this information to infer what program is running on a target device.
+We remarked before that the functionality of a sensor is potentially valuable information. For instance some sensors might be predominantly passive, e.g. they might read the temperature and report it back periodically, whereas some sensors might control something upon receiving commands. Thus knowing the functionality enables an adversary to make (more) sense of the observed traffic in the network. This could be done if a `fingerprint' could be produced for different programs. From an adversary's perspective a positive result would imply that they could `fingerprint' products which are on the market and thus use this information to infer what program is running on a target device.
 
 % program executing on the target is a valuable information in aspect of security and privacy, as it determines functionality of a device and therefore the contents of encrypted packets associated. For instance, knowing a target being an actuator that controls an air conditioner immediately suggests a packet directed to it might  be a controlling command.
 
@@ -243,7 +265,7 @@ We explored the feasibility of fingerprinting programs on an CC2538 running Cont
 	\caption{helloworld PRIs\label{HelloworldPri}}
 \end{figure}
 
-We further plotted the upper outliers, mostly ranged [12, 2000]ms, in \Cref{HelloworldPriOutliers}. We suppose these outliers correspond to the extended response time as depicted by Sensor Node 2 in \Cref{FingerprintTheory}. The distribution described by \Cref{HelloworldPriOutliers} is the fingerprint of the ``helloworld'' example.
+We further plotted the upper outliers, mostly ranged [12, 2000]ms, in \Cref{HelloworldPriOutliers}. Unfortunately we do not have a solution to investigate the exact cause of such delay, as we unable to control the code execution that requires environmental interaction within a timing critical context. Nevertheless, we suppose these outliers correspond to the extended response time as depicted by Sensor Node 2 in \Cref{FingerprintTheory}. The distribution described by \Cref{HelloworldPriOutliers} is the fingerprint of the ``helloworld'' example.
 
 The result in \Cref{HelloworldPri} shows a clear gap between the usual PRIs and extended PRIs. In fact other applications we experimented also showed the same property. This implies that an adversary can easily draw a threshold by observing the whole PRI distribution and then filter out the fingerprint. In our experiments the threshold is set to 12ms but any other values within the gap would also work. 
 
@@ -253,7 +275,7 @@ We collected the fingerprints for three programs taken from the Contiki OS examp
 	 
 	\item[powertrace] This program records the power consumption and broadcasts a constant message.
 	
-	\item[Sensorpayload] This program is based on the ``er-rest-example'' embedded together with sensor accesses taken from ``cc2538-demo''. It captures a real case scenario where three different sensors, namely Temperature, VDD and ALS, are being accessed through CoAP.
+	\item[Sensorpayload] This program is based on the ``er-rest-example'' embedded together with sensor accesses taken from ``cc2538-demo''. It captures a real case scenario where three different sensors, namely Temperature, Vdd and ALS, are being accessed through CoAP.
 \end{description}
 
 Specifically for ``Sensorpayload'' we collected fingerprints for 8 different scenarios where different sensors are being accessed. For each program we independently collected 2 fingerprints for comparison.
@@ -263,7 +285,7 @@ Specifically for ``Sensorpayload'' we collected fingerprints for 8 different sce
 \subsubsection{Fingerprint Matching}
 %Comparing the distribution.
 
-During the experiments we realised that most of the fingerprints do not adhere to common distributions; therefore we used non parametric test, the Kolmogorov-Smirnov Distance\cite{KsTest}, as our test statistic. \Cref{ksdistances} summarises the relative KS distances computed on each pair of fingerprints in our experiments.
+During the experiments we realised that most of the fingerprints do not adhere to common distributions; therefore we used a non parametric test, the Kolmogorov-Smirnov Distance\cite{KsTest}, as our test statistic. This is a well understood statistic with previous uses in side channel analysis\cite{KsDistanceDistinguisher}. \Cref{ksdistances} summarises the relative KS distances computed on each pair of fingerprints in our experiments.
 
 Although fingerprints collected on the same application were rejected by the Kolmogorov-Smirnov Test, we noticed that their KS distance tends to be smaller comparing to fingerprints collected on different programs, as the \textbf{bold} cells marked in \Cref{ksdistances}. 
 
@@ -271,9 +293,9 @@ By adapting our distinguisher to utilise the minimum KS distance, we were able t
 
 \section{Conclusion\label{sec: Conclusion}}
 
-In this paper we explore, for the first time, the use of packet lengths and response times, which are protocol level side channels, as means to recover information about IoT `things'. We do this via some experiments, which we base on two extremely popular devices running on a popular open source OS, with a typical stack of protocols. Whilst we do not cover a wide range of devices, the fact that two of the most popular devices show the characteristics that we hypothesise, gives credibility to our results. Our results show that it is possible (in principle) to recover information about a device and its function (i.e. the hardware and the software that runs on it) via inspecting encrypted traffic that it produces. We also point out that ICMP messages can be distinguished from each other despite the use of encryption. 
+In this paper we explore, for the first time, the use of packet lengths and response times, which are protocol level side channels, as means to recover information about IoT `things'. We do this experimentally, which we base on two extremely popular devices running on a popular open source OS, with a typical stack of protocols. Whilst we do not cover a wide range of devices, the fact that two of the most popular devices show the characteristics that we hypothesise, gives credibility to our results. Our results show that it is possible (in principle) to recover information about a device and its function (i.e. the hardware and the software that runs on it) via inspecting encrypted traffic that it produces. We also point out that ICMP messages can be distinguished from each other despite the use of encryption. 
 
-In order to mitigate the leakage that is given by packet lengths, previous works recommends padding \cite{Peekaboo}. We echo this recommendation. Whilst padding to MTU is considered inefficient for the Internet, it is in fact highly appropriate for 6LoWPAN because:
+In order to mitigate the leakage that is given by packet lengths, previous works recommend padding \cite{Peekaboo}. We echo this recommendation. Whilst padding to MTU is considered inefficient for the Internet, it is in fact highly appropriate for 6LoWPAN because:
 \begin{itemize}
 	\item It completely hides the length of original plaintext.
 	\item 6LoWPAN has only a low MTU of 127 bytes; therefore the overhead is acceptable.
@@ -282,7 +304,7 @@ In order to mitigate the leakage that is given by packet lengths, previous works
 
 %Resourceful applications can enhance the countermeasure by inserting dummy packets.
 
-With regard to the leaking information about the device or OS, we suggest strictly applying the standard MTU to eliminate the differences in drivers. Although there is a potential of performance downgrade, but it will also improve the compatibility among different devices.
+With regard to the leaking information about the device or OS, we suggest strictly applying the standard MTU to eliminate the differences in drivers. Although there is a potential of performance downgrade, it will also improve the compatibility among different devices.
 
 
 %Two options:

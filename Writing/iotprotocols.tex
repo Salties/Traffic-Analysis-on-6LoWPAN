@@ -20,7 +20,15 @@ On the software side, we by principle adopted the default settings of Contiki OS
 
 \begin{table}[!h]
 	\centering
-	\input{tbl/protocols.tex}
+	\begin{tabular}{|c|c|}
+	\hline
+	Physical                        & \multirow{2}{*}{802.15.4} \\ \cline{1-1}
+	Link                          &                           \\ \hline
+	Network                       & 6LoWPAN                   \\ \hline
+	\multirow{2}{*}{Transmission} & UDP                       \\ \cline{2-2} 
+	                              & DTLS*                     \\ \hline
+	Application                   & CoAP / CoAPs*             \\ \hline
+	\end{tabular}
 	\caption{Protocol stack for our experiments(* is optinal)\label{Protocols}}
 \end{table}
 
