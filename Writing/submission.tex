@@ -265,7 +265,7 @@ We explored the feasibility of fingerprinting programs on an CC2538 running Cont
 	\caption{helloworld PRIs\label{HelloworldPri}}
 \end{figure}
 
-We further plotted the upper outliers, mostly ranged [12, 2000]ms, in \Cref{HelloworldPriOutliers}. Unfortunately we do not have a solution to investigate the exact cause of such delay, as we unable to control the code execution that requires environmental interaction within a timing critical context. Nevertheless, we suppose these outliers correspond to the extended response time as depicted by Sensor Node 2 in \Cref{FingerprintTheory}. The distribution described by \Cref{HelloworldPriOutliers} is the fingerprint of the ``helloworld'' example.
+We further plotted the upper outliers, mostly ranged [12, 2000]ms, in \Cref{HelloworldPriOutliers}. Unfortunately we do not have a solution to investigate the exact cause of such delay, as we were unable to control the code execution that requires environmental interaction within a timing critical context. Nevertheless, we suppose these outliers correspond to the extended response time as depicted by Sensor Node 2 in \Cref{FingerprintTheory}. The distribution described by \Cref{HelloworldPriOutliers} is the fingerprint of the ``helloworld'' example.
 
 The result in \Cref{HelloworldPri} shows a clear gap between the usual PRIs and extended PRIs. In fact other applications we experimented also showed the same property. This implies that an adversary can easily draw a threshold by observing the whole PRI distribution and then filter out the fingerprint. In our experiments the threshold is set to 12ms but any other values within the gap would also work. 
 
