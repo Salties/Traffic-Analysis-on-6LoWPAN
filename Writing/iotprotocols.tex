@@ -1,34 +1,35 @@
+
 \section{A Typical IoT Protocol Stack\label{sec: IotProtocols}} 
-%A typical sensor network is built as described in \ref{Protocols}.
+
 %IoT Protocols
-Many protocols are proposed for different IoT applications adapting to various requirements. For example, some smart houses simply use WiFi for connectivity and VANETs\footnote{Vehicular ad hoc networks} may adopt DSRC\cite{DSRC}. 
+There are large number of protocols, which have been proposed for different IoT applications adapting to various requirements. For example, some smart houses simply use WiFi for connectivity and VANETs\footnote{Vehicular ad hoc networks} may adopt DSRC\cite{DSRC}. 
 
 %WSN Protocols
-In this paper we focused on 6LoWPAN\cite{rfc4944} which is based on 802.15.4\cite{802154}. These standards are designated for constrained environments such as Wireless Sensor Networks,  but other competing standards exist at different layers. Bluetooth Low Energy(BLE)\cite{BLE} is a strong competitor to 802.15.4 as well as the LiFi\cite{LiFi} technology. Zigbee\cite{Zigbee} is originally intended as a collective protocol over 802.15.4 but it has been recently adapted to IP-based network in ZigbeeIP\cite{ZigbeeIp} so to compete with 6LoWPAN. The RIME stack\cite{RIME} proposed a set of non-layered primitives over 802.15.4 but it is likely to be phased-out probably due to the reluctance of interoperability with the TCP/IP protocol stack of Internet. 
+In this paper we focus on 6LoWPAN\cite{rfc4944} which is based on the 802.15.4\cite{802154} standard. These standards are designated for constrained environments such as Wireless Sensor Networks,  but other competing standards exist at different layers. Bluetooth Low Energy(BLE)\cite{BLE} is a strong competitor to 802.15.4 as well as the LiFi\cite{LiFi} technology. Zigbee\cite{Zigbee} was originally intended as a collective protocol over 802.15.4 but it has been recently adapted to IP-based network in ZigbeeIP\cite{ZigbeeIp}. The RIME stack\cite{RIME} proposes a set of non-layered primitives over 802.15.4 but it is likely to be phased-out due to the lack of of interoperability with the TCP/IP protocol stack. 
 
 %6LoWPAN OS
-6LoWPAN is supported by several competing IoT Operating Systems, including Contiki OS\cite{Contiki}, OpenWSN\cite{OpenWSN}, FreeRTOS\cite{FreeRTOS} and the recent RIOT\cite{RIOT}. Contiki OS is chosen for our experiments for its customisability.
+6LoWPAN thus is the most popular standard for low power networks, and thus it is supported by several competing IoT Operating Systems, including Contiki OS\cite{Contiki}, OpenWSN\cite{OpenWSN}, FreeRTOS\cite{FreeRTOS} and the recent RIOT\cite{RIOT}. We chose Contiki OS for our experiments because it is easy to customise.
 
 \subsection{Our experimental network}
 %Say something about devices, and choice of OS, etc.
 %Hardware
-Our experiment networks are constructed using devices constituted of TelosB\cite{TelosB} and CC2538\cite{CC2538}. TelosB is a low cost sensor powered by MSP430 with AES co-processor representing the low-end devices. CC2538 is the high end device powered by ARM Cortex-M3 with multiple cryptographic processors including AES, RSA, SHA-2 and ECC, suggesting it for security usage.
-%Should I cite our previous paper...?
+Our experimental network is constructed using two different devices. These are a TelosB\cite{TelosB} and a CC2538\cite{CC2538}. The TelosB is a low cost sensor powered by an MSP430 with an AES co-processor. It represents typical low-end devices. The CC2538 is the high end device powered by an ARM Cortex-M3 with multiple cryptographic processors including AES, RSA, SHA-2 and ECC, suggesting that it is suitable to develop secure applications. %Should I cite our previous paper...?
 
 %Software
-On the software side, we by principle adopted the default settings of Contiki OS, except enabling 802.15.4 Security\cite{802154} upon its study. Note that Contiki MAC\cite{ContikiMAC} is chosen by default over TSCH\cite{TSCH}, albeit we would argue the channel information of TSCH could be an additional leakage source. For Layer 4\cite{OSI} and above protocols, we considered the widely accepted combination of CoAP\cite{rfc7252} over DTLS\cite{rfc6347}(optional) over UDP\cite{rfc768}\footnote{CoAPs is equivalent to CoAP over DTLS.}. \Cref{Protocols} summarises our choice of protocol stack.
+Both devices are supported by the Contiki OS. We adopted the default settings of the Contiki OS, except for enabling 802.15.4 security\cite{802154} for some experiments. Note that the Contiki MAC\cite{ContikiMAC} is chosen by default over TSCH\cite{TSCH}. For Layer 4\cite{OSI} and above protocols, we went with the widely accepted combination of CoAP\cite{rfc7252}, and DTLS\cite{rfc6347}(optional) over UDP\cite{rfc768}\footnote{CoAPs is equivalent to CoAP over DTLS.}. \Cref{Protocols} summarises our choice of protocol stack.
 
 \begin{table}[!h]
 	\centering
 	\begin{tabular}{|c|c|}
-	\hline
-	Physical                        & \multirow{2}{*}{802.15.4} \\ \cline{1-1}
-	Link                          &                           \\ \hline
-	Network                       & 6LoWPAN                   \\ \hline
-	\multirow{2}{*}{Transmission} & UDP                       \\ \cline{2-2} 
-	                              & DTLS*                     \\ \hline
-	Application                   & CoAP / CoAPs*             \\ \hline
+		\hline
+		Physical                        & \multirow{2}{*}{802.15.4} \\ \cline{1-1}
+		Link                          &                           \\ \hline
+		Network                       & 6LoWPAN                   \\ \hline
+		\multirow{2}{*}{Transmission} & UDP                       \\ \cline{2-2} 
+		& DTLS*                     \\ \hline
+		Application                   & CoAP / CoAPs*             \\ \hline
 	\end{tabular}
+	
 	\caption{Protocol stack for our experiments(* is optinal)\label{Protocols}}
 \end{table}
 
@@ -38,4 +39,5 @@ On the software side, we by principle adopted the default settings of Contiki OS
 %\end{itemize}
 
 %Avaible security options.
-For our settings, there are two schemes available for packet encryption, namely 802.15.4 Security\cite{802154} and DTLS\cite{rfc6347}. 802.15.4 Security is provided by noncoresec\cite{noncoresec} which implements 802.15.4 authenticated encryption with AES-128 CCM*\cite{CCM} using a hard-coded key shared by the whole 6LoWPAN network. tinyDTLS\cite{tinydtls} provides a minimum DTLS implementation that supports only two ciphersuites which are TLS\_PSK\_WITH\_AES\_128\_CCM\_8\cite{rfc6655} and TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8\cite{rfc6655} respectively. We do not concern the case where both 802.15.4 Security and DTLS are enabled simultaneously, as the de facto encryption schemes are both AES-128 CCM*. Overlapping them does not enhance the security but only increases the overhead.
+\subsubsection{802.15.4 and DTLS}
+In our setting, there are two standards available for packet encryption, namely 802.15.4 security\cite{802154} and DTLS\cite{rfc6347}. 802.15.4 security is provided by the noncoresec\cite{noncoresec} API, which implements 802.15.4 authenticated encryption with AES-128 CCM*\cite{CCM} using a hard-coded key shared by the whole 6LoWPAN network. We chose tinyDTLS\cite{tinydtls}  as library for the DTLS protocols, because it provides a minimum DTLS implementation that supports two ciphersuites which are TLS\_PSK\_WITH\_AES\_128\_CCM\_8\cite{rfc6655} and TLS\_ECDHE\_ECDSA\_WITH\_AES\_128\_CCM\_8\cite{rfc6655} respectively. Evidently, they both utilise AES-128 CCM* as the packet encryption method.
