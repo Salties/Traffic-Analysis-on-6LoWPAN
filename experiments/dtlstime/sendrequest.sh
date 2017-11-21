@@ -1,0 +1,26 @@
+#!/bin/bash
+
+#REQUEST=$1
+l1="" #1 bytes
+l7="123456" #6 bytes
+l12="12345678901" #12 bytes
+l18="12345678901234567" #18 bytes
+l23="1234567890123456789012" #23 bytes
+l29="1234567890123456789012345678" #29 bytes
+l35="1234567890123456789012345678901234" #35 bytes
+l41="1234567890123456789012345678901234567890" #41 bytes
+l46="123456789012345678901234567890123456789012345" #46 bytes
+
+REQUEST=${l46}
+
+
+while read -p "Use Ctrl^D to start sending GET:" LINE
+do
+	echo $LINE;
+done
+
+while (( 1 ))
+do
+	echo $REQUEST
+	sleep 1
+done

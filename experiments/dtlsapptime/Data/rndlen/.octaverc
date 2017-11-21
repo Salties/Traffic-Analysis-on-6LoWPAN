@@ -1,0 +1,11 @@
+load rndlen.m
+
+function tP = tp(req, res, b0 = 78.388, breq = 0.538, bres = 0.638)
+	tP = b0 + breq * req + bres * res;
+	return;
+endfunction
+
+function tA = ta(ticks)
+	tA = ticks * 1000 / 32768;
+	return;
+endfunction

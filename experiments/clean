@@ -1,0 +1,37 @@
+#!/bin/bash
+
+#A script to clean the experiments.
+
+#The TARGETs used in experiments.
+Platforms="sky wismote cc2538dk"
+
+#Ignore list
+Ignored="clean rime .. ."
+
+echo Ignored:$Ignored
+
+#Iteratre for each experiment.
+for subfolder in `ls`; do
+	#Skip the ignore list
+	if [[ $Ignored =~ $subfolder ]]; then
+		continue;
+	fi
+
+	echo Entering "$PWD"/"$subfolder"
+	#Step in subfolders
+	cd $subfolder;
+
+	for target in $Platforms; do
+		#Do "make clean"
+		make  TARGET=$target clean;
+		#Remove binary images.
+		rm -f *.$target;
+		rm -f symbols.c
+		rm -f symbols.h
+		rm -f *~
+	done
+
+	echo Leaving $subfolder
+	#Step out.
+	cd ..;
+done

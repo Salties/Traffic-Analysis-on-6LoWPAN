@@ -1,0 +1,1014 @@
+#Contiki-3.0
+#TI SmartRF06 + cc2538EM
+# Net: sicslowpan
+# MAC: CSMA
+# RDC: ContikiMAC
+#Rime configured with address 00:12:4b:00:04:1e:af:c6
+#Random AES-128 implementation test for cc2538dk.
+#Using OpenBSD optimised AES implementation.
+#Rounds in each sample: 200
+#Sample size: 100
+#Rtimer clock ticks per second on this platform is : 32768
+#plaintext addr: 536878428l
+#ciphertext addr: 536881644l
+#Sample 1/100
+#Key	:01 23 45 67 89 ab cd ef 12 34 56 78 9a bc de f0 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: b2 45 f1 db 3e 26 1f 4e 84 8e 13 e1 ec ee 5c c9 
+#Round	: 200
+#Start	: 55874
+#End	: 56514
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 2/100
+#Key	:b3 66 b4 bc b7 8d d2 a1 96 ba 45 99 76 52 82 39 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 19 38 7f b1 40 ed 83 92 d1 45 33 1a 98 d2 76 a9 
+#Round	: 200
+#Start	: 88301
+#End	: 88941
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 3/100
+#Key	:aa 5e cb 0d f7 60 51 33 47 ff 76 83 ee 80 f4 90 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: f4 e7 fe 25 fc 4e 78 49 18 6b f9 f1 50 d2 d7 af 
+#Round	: 200
+#Start	: 121068
+#End	: 121708
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 4/100
+#Key	:5e b9 35 28 0b 2e 29 7a 5f 94 8f 72 be 52 23 3f 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 44 c3 19 2c 65 a1 34 d2 fa d3 5b e6 2f 6b a6 ae 
+#Round	: 200
+#Start	: 153837
+#End	: 154478
+#Time Elapsed	:
+641
+#Finalise.
+#Sample 5/100
+#Key	:1a 7a 2c 04 6e 8f 1d a8 a5 47 d4 94 91 39 85 91 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 21 68 f4 6f 9b 68 9f 18 bc 70 e3 9c 13 f2 df 45 
+#Round	: 200
+#Start	: 186605
+#End	: 187245
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 6/100
+#Key	:3b 12 d8 6b f5 e7 82 b0 19 37 37 08 82 cb 5a d4 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 9e ad cf 66 4c f0 9c 5e ad 59 e1 48 c2 9d b5 a1 
+#Round	: 200
+#Start	: 219373
+#End	: 220013
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 7/100
+#Key	:a5 bf 17 0d b9 17 1e ee b4 6e d6 40 40 56 ef 75 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 5d 56 49 1d 4a 86 cd 09 8e e4 b8 ce 28 45 31 6d 
+#Round	: 200
+#Start	: 252141
+#End	: 252782
+#Time Elapsed	:
+641
+#Finalise.
+#Sample 8/100
+#Key	:f8 e9 5e 10 f3 91 d3 e7 3a 8a 6e 8e 68 13 de 18 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: f1 fe 96 04 6f 9d 99 ba af dd ca 2c 8c 00 ed b5 
+#Round	: 200
+#Start	: 284908
+#End	: 285548
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 9/100
+#Key	:09 17 c8 14 9c 0c 4a 5d 95 57 a4 a2 e4 13 33 ad 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: b3 f5 fc 6a 7b 69 1a 73 46 27 9d 41 f2 24 ea 15 
+#Round	: 200
+#Start	: 317676
+#End	: 318315
+#Time Elapsed	:
+639
+#Finalise.
+#Sample 10/100
+#Key	:ba e2 34 7e e7 65 50 2e d3 70 39 e3 16 37 d9 b8 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: cf 9c 4f 95 6b b5 75 33 7b c8 d4 58 7d a0 05 f4 
+#Round	: 200
+#Start	: 350449
+#End	: 351089
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 11/100
+#Key	:75 7e 7b eb 8c d0 25 1d a8 b8 ed bb 6b 97 dc 4c 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 28 6c fb 60 63 8a 51 e6 28 43 33 de 81 6b 1c ce 
+#Round	: 200
+#Start	: 383216
+#End	: 383856
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 12/100
+#Key	:5d 12 80 8b ef 5a 74 fb 80 fb de 65 ea fc c0 82 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: ea 6a 31 ed 06 2b 2a 60 32 a0 99 a5 65 c5 bc bf 
+#Round	: 200
+#Start	: 415984
+#End	: 416624
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 13/100
+#Key	:b7 78 b1 66 e9 71 5e 9b b2 5b 47 c0 8f 39 7c 3d 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: dd 73 cc e3 97 8f 24 b1 10 9e 0e ee c7 ee a3 cb 
+#Round	: 200
+#Start	: 448752
+#End	: 449393
+#Time Elapsed	:
+641
+#Finalise.
+#Sample 14/100
+#Key	:6a 0b 7d 85 7e fe 7a 2a a2 c5 49 2e 48 d7 df f6 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 3c 05 27 74 e7 19 a0 07 90 af 8d b0 c5 61 af df 
+#Round	: 200
+#Start	: 481519
+#End	: 482159
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 15/100
+#Key	:56 0e 5a f1 99 e7 da 2d 32 6a c4 9e 8d b6 70 29 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: f9 67 53 ca 7b b6 5b b5 39 4e 5f 3a 0e 81 ad 53 
+#Round	: 200
+#Start	: 514287
+#End	: 514928
+#Time Elapsed	:
+641
+#Finalise.
+#Sample 16/100
+#Key	:af 69 09 3b e2 51 81 98 0b 24 9b a4 83 37 dd 7a 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 6f 43 1c 43 2d 24 3a 96 3f cc 9f 68 d2 bb 24 eb 
+#Round	: 200
+#Start	: 547056
+#End	: 547696
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 17/100
+#Key	:c0 2a 15 78 cf 75 bb 0e 34 e8 04 cc 51 8c f9 91 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: ce 46 b7 71 c1 a3 6f 11 c3 af 53 ea ce 9b 6b a4 
+#Round	: 200
+#Start	: 579823
+#End	: 580463
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 18/100
+#Key	:0e 6c a2 09 0e d6 d4 1f f7 47 57 26 9f 17 92 35 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 9c 76 1d a1 30 75 6a 0c 30 d2 27 a9 a6 4c ef e3 
+#Round	: 200
+#Start	: 612591
+#End	: 613231
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 19/100
+#Key	:92 1a bf a8 3e a3 be 13 c7 95 70 8f 39 5b 7d d6 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: d0 c9 89 7d 7e ab ce a9 f9 03 ab e5 ba b1 47 2a 
+#Round	: 200
+#Start	: 645359
+#End	: 645999
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 20/100
+#Key	:42 d3 36 d5 40 08 70 ba 3e 96 db 6a 83 ea 3a fc 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: b5 e4 7a b2 cd 0c 01 73 89 81 99 42 2e 5b 7a 8f 
+#Round	: 200
+#Start	: 678127
+#End	: 678767
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 21/100
+#Key	:f7 37 4c 67 8d 04 71 c9 b7 17 42 28 ad b1 40 73 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 4b 1d c4 ee 30 99 f2 4f 7f 0b 1e 0f ac 09 de 23 
+#Round	: 200
+#Start	: 710896
+#End	: 711537
+#Time Elapsed	:
+641
+#Finalise.
+#Sample 22/100
+#Key	:bc 2a 88 89 bd 9d 83 86 c8 1c 5c 27 01 b8 9e 50 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: ac eb 8d 57 17 9f 0f 2d d9 5c 87 ff af 01 44 23 
+#Round	: 200
+#Start	: 743663
+#End	: 744303
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 23/100
+#Key	:10 c1 05 de aa 02 8c ab 11 40 db d8 ae b9 da 73 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: c0 3e 67 0d f7 39 3e 5c e3 4b 1a e7 02 26 47 de 
+#Round	: 200
+#Start	: 776431
+#End	: 777070
+#Time Elapsed	:
+639
+#Finalise.
+#Sample 24/100
+#Key	:d0 ff 62 d3 5d 3b b2 f7 f2 0b c1 3f ac 9f 9d ad 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: e1 e8 5c 49 d1 4f 9d 37 db 97 47 5e 71 c3 9f f0 
+#Round	: 200
+#Start	: 809199
+#End	: 809839
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 25/100
+#Key	:31 17 3e 9a 8c 74 2f c0 29 9c 86 61 dd 5c 02 5d 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: b4 5b 1b 74 ae b2 ef d0 7d 9a a8 4a 0d 47 9f 45 
+#Round	: 200
+#Start	: 841967
+#End	: 842607
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 26/100
+#Key	:85 4c 25 ee 22 c6 c0 10 54 06 2e 2b d0 1b 9d 18 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: cb 58 fc 74 06 08 93 51 e1 41 58 ee 2c ba 1d b7 
+#Round	: 200
+#Start	: 874737
+#End	: 875377
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 27/100
+#Key	:4e 14 d9 9a 24 ce 53 41 b5 47 76 c5 fc a1 80 af 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 35 70 ec 57 38 f1 e2 ae 09 2d a3 0e 2f bf ea 53 
+#Round	: 200
+#Start	: 907503
+#End	: 908144
+#Time Elapsed	:
+641
+#Finalise.
+#Sample 28/100
+#Key	:7b 64 35 cd 1c 3f b1 ef bc 6a d5 cb d3 1e 6a fc 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 2e e5 b7 21 f9 1b 94 4a 44 9c 4b d3 8d be d4 db 
+#Round	: 200
+#Start	: 940271
+#End	: 940911
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 29/100
+#Key	:55 81 82 ec e5 24 25 a5 f8 f6 9e 18 5e a0 be 27 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: e3 22 95 12 9d 22 9b 0d 53 83 56 49 fb 39 41 bc 
+#Round	: 200
+#Start	: 973040
+#End	: 973680
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 30/100
+#Key	:b6 a3 17 fe 78 06 be a8 ab 75 c8 51 a5 99 ff 9b 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 3b f1 7a b0 65 90 28 85 35 b6 2d 2e 30 5f ab 20 
+#Round	: 200
+#Start	: 1005807
+#End	: 1006447
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 31/100
+#Key	:8d 52 6d 4e 1d 96 96 2d 9e c3 e5 7f 95 c6 54 bb 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 88 14 c5 96 c8 bf 41 ff 16 08 8a 36 0d 18 4f 23 
+#Round	: 200
+#Start	: 1038576
+#End	: 1039216
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 32/100
+#Key	:05 46 a8 d8 d5 29 d7 d2 88 cb 6f 49 98 de 1b 98 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 8a bf 58 a9 7c 4e f2 3e df 19 9e 1c 9c bb 89 e7 
+#Round	: 200
+#Start	: 1071343
+#End	: 1071983
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 33/100
+#Key	:8f f9 f0 71 a9 67 25 ec 57 d2 f1 55 04 65 92 7f 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 81 16 f7 3a 45 81 49 3e 24 f4 df bd 75 12 95 a9 
+#Round	: 200
+#Start	: 1104111
+#End	: 1104751
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 34/100
+#Key	:0e ef 07 4b ec e6 6c d2 73 26 2e e8 71 77 07 d6 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 3e 6d 42 14 58 e5 f0 07 dd 26 4d cc e2 ae ce 85 
+#Round	: 200
+#Start	: 1136879
+#End	: 1137519
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 35/100
+#Key	:30 82 45 5f b4 03 9c d5 ae 00 63 24 93 d9 c9 53 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 64 23 5e a2 d6 46 91 23 0b 0d 81 aa f1 92 57 2a 
+#Round	: 200
+#Start	: 1169647
+#End	: 1170287
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 36/100
+#Key	:54 a1 1b fd 62 45 0d f6 a5 0d e2 8e 62 4b 9e 79 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 64 9c be 49 ae 13 30 dd 6d 97 c1 4c ff 81 a9 e0 
+#Round	: 200
+#Start	: 1202416
+#End	: 1203056
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 37/100
+#Key	:30 3d a5 b4 cc 56 3d 2b c8 9a 23 c2 9d ca 37 99 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: ea 0f b0 b5 e7 68 cd f0 6a a3 4d bf ea dc 8a af 
+#Round	: 200
+#Start	: 1235184
+#End	: 1235824
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 38/100
+#Key	:da 32 15 01 2b 3e f0 db a2 39 6e 7d 77 16 bd 36 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 61 64 45 35 3a 29 53 ee 21 ae 42 c6 55 ad bf 89 
+#Round	: 200
+#Start	: 1267951
+#End	: 1268591
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 39/100
+#Key	:bb 56 50 34 11 17 a3 35 83 97 2c bb 22 bb 02 bf 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: e7 30 6b 67 30 f2 ac 8d 2a 5d 4c 96 bb 6f b5 1c 
+#Round	: 200
+#Start	: 1300719
+#End	: 1301359
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 40/100
+#Key	:5c 66 3b 53 21 e5 0f b8 a9 ca 60 2d 99 d4 b7 a3 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 6d df a7 f6 d9 c4 95 ef a4 65 24 22 09 e9 e1 54 
+#Round	: 200
+#Start	: 1333488
+#End	: 1334128
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 41/100
+#Key	:31 b9 9c a5 f8 21 9a 57 0d af 44 0f 90 3d 56 f7 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: a0 ff 19 3a 0d 8e 41 40 91 c7 49 8c 7e 4d 86 f7 
+#Round	: 200
+#Start	: 1366256
+#End	: 1366895
+#Time Elapsed	:
+639
+#Finalise.
+#Sample 42/100
+#Key	:91 46 85 9f f5 af db 17 9c 68 0d 83 ee 70 d0 00 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 3e fe 4c e5 c0 96 a1 df 84 da ee fb 70 f2 cc 00 
+#Round	: 200
+#Start	: 1399023
+#End	: 1399662
+#Time Elapsed	:
+639
+#Finalise.
+#Sample 43/100
+#Key	:af b8 c9 7a 35 39 7a c8 18 b2 e3 78 9e 82 1c 00 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: ba 77 2a e6 db 68 29 f8 ef 5b 9b 29 dd 56 67 72 
+#Round	: 200
+#Start	: 1431791
+#End	: 1432431
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 44/100
+#Key	:15 cf e3 9c ee 51 53 30 f7 e9 78 51 43 d4 7b 72 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: a3 22 ad f1 6c 6a ca 33 4d 23 04 3e 2f c2 61 52 
+#Round	: 200
+#Start	: 1464559
+#End	: 1465199
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 45/100
+#Key	:b6 ed 4e 6d 82 3b 99 03 ba ca 7c 6f 6c 16 1a 20 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 2c 80 be 08 c0 38 1c aa 6a 1c 05 d4 fc a0 75 1a 
+#Round	: 200
+#Start	: 1497328
+#End	: 1497968
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 46/100
+#Key	:9a 6d f0 65 42 03 85 a9 d0 d6 79 bb 90 b6 6f 3a 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: ca 5f d0 b4 d8 96 4a f0 22 93 03 e0 9b 17 17 c8 
+#Round	: 200
+#Start	: 1530096
+#End	: 1530736
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 47/100
+#Key	:50 32 20 d1 9a 95 cf 59 f2 45 7a 5b 0b a1 78 f2 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 5e ed 64 5e 92 2d ce f5 64 1a 16 28 8f e0 2e b3 
+#Round	: 200
+#Start	: 1562863
+#End	: 1563504
+#Time Elapsed	:
+641
+#Finalise.
+#Sample 48/100
+#Key	:0e df 44 8f 08 b8 01 ac 96 5f 6c 73 84 41 56 41 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 7b 48 32 c7 96 fb 92 58 7f 89 46 c7 58 ad 7a ca 
+#Round	: 200
+#Start	: 1595631
+#End	: 1596271
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 49/100
+#Key	:75 97 76 48 9e 43 93 f4 e9 d6 2a b4 dc ec 2c 8b 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 26 35 ea 32 91 c1 17 48 e1 c8 e1 9a 4d 69 f0 31 
+#Round	: 200
+#Start	: 1628399
+#End	: 1629039
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 50/100
+#Key	:53 a2 9c 7a 0f 82 84 bc 08 1e cb 2e 91 85 dc ba 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 73 5e 1b 98 07 0e ae 89 f5 3f 4a 5c 75 30 45 5e 
+#Round	: 200
+#Start	: 1661169
+#End	: 1661809
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 51/100
+#Key	:20 fc 87 e2 08 8c 2a 35 fd 21 81 72 e4 b5 99 e4 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: ea 7d 7a 84 92 f7 ef c7 8d 62 3e 69 dc b6 5f 6f 
+#Round	: 200
+#Start	: 1693936
+#End	: 1694576
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 52/100
+#Key	:ca 81 fd 66 9a 7b c5 f2 70 43 bf 1b 38 03 c6 8b 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 2f d8 bf 6c 46 af 62 2a 95 ca a2 2a 6c 24 73 e4 
+#Round	: 200
+#Start	: 1726703
+#End	: 1727343
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 53/100
+#Key	:e5 59 42 0a dc d4 a7 d8 e5 89 1d 31 54 27 b5 6f 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 0c 4e 2a 58 cd ae 3a f1 a1 15 46 eb ea fe dd 7e 
+#Round	: 200
+#Start	: 1759471
+#End	: 1760110
+#Time Elapsed	:
+639
+#Finalise.
+#Sample 54/100
+#Key	:e9 17 68 52 11 7a 9d 29 44 9c 5b da be d9 68 11 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: e0 89 fd 73 e4 49 09 14 58 fb b9 f7 06 cf 1d 51 
+#Round	: 200
+#Start	: 1792240
+#End	: 1792880
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 55/100
+#Key	:09 9e 95 21 f5 33 94 3d 1c 67 e2 2d b8 16 75 40 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 46 b4 5e 8e c3 c0 ab b9 da 6b 8c f4 6c eb 44 90 
+#Round	: 200
+#Start	: 1825008
+#End	: 1825647
+#Time Elapsed	:
+639
+#Finalise.
+#Sample 56/100
+#Key	:4f 2a cb af 36 f3 3f 84 c6 0c 6e d9 d4 fd 31 d0 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: d2 95 ff e7 96 72 d2 5f f3 e4 37 a6 99 2a 63 86 
+#Round	: 200
+#Start	: 1857776
+#End	: 1858415
+#Time Elapsed	:
+639
+#Finalise.
+#Sample 57/100
+#Key	:9d bf 34 48 a0 81 ed db 35 e8 59 7f 4d d7 52 56 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 9a ac a7 de dc 6a 8c 48 8f 93 cf db be 16 21 03 
+#Round	: 200
+#Start	: 1890544
+#End	: 1891184
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 58/100
+#Key	:07 13 93 96 7c eb 61 93 ba 7b 96 a4 f3 c1 73 55 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 54 68 6a cc 52 c4 df e4 2c 3d 19 bd ee d1 8b 81 
+#Round	: 200
+#Start	: 1923311
+#End	: 1923951
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 59/100
+#Key	:53 7b f9 5a 2e 2f be 77 96 46 8f 19 1d 10 f8 d4 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 2e 44 14 99 d9 de d5 8a e2 3b 21 a8 c9 28 cc cf 
+#Round	: 200
+#Start	: 1956079
+#End	: 1956719
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 60/100
+#Key	:7d 3f ed c3 f7 f1 6b fd 74 7d ae b1 d4 38 34 1b 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: eb 6a f9 9a 6f 39 0f a8 2f 5d d8 dc 8d c7 49 f1 
+#Round	: 200
+#Start	: 1988847
+#End	: 1989487
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 61/100
+#Key	:96 55 14 59 98 c8 64 55 5b 20 76 6d 59 ff 7d ea 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 28 65 76 63 77 0f 1d 2f d1 2e 88 0b c8 93 77 fe 
+#Round	: 200
+#Start	: 2021953
+#End	: 2022593
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 62/100
+#Key	:be 30 62 3a ef c7 79 7a 8a 0e fe 66 91 6c 0a 14 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 91 33 c4 56 70 84 cc 0e 0e 46 f9 24 92 9a ae 6c 
+#Round	: 200
+#Start	: 2054385
+#End	: 2055025
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 63/100
+#Key	:2f 03 a6 6c 9f 43 b5 74 84 48 07 42 03 f6 a4 78 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 41 48 cb 32 ed de 60 3e 8e b0 6b 09 0a 2d 34 09 
+#Round	: 200
+#Start	: 2087151
+#End	: 2087792
+#Time Elapsed	:
+641
+#Finalise.
+#Sample 64/100
+#Key	:6e 4b 6d 5e 72 9d d5 4a 0a f8 6c 4b 09 db 90 71 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 6a 26 71 21 f4 4f 66 4b 3a d7 bf 50 73 12 26 ec 
+#Round	: 200
+#Start	: 2119919
+#End	: 2120559
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 65/100
+#Key	:04 6d 1c 7f 86 d2 b3 01 30 2f d3 1b 7a c9 b6 9d 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: e6 45 f4 65 c7 79 9f 3c 43 38 6c 24 a3 88 d9 84 
+#Round	: 200
+#Start	: 2152687
+#End	: 2153328
+#Time Elapsed	:
+641
+#Finalise.
+#Sample 66/100
+#Key	:e2 28 e8 1a 41 ab 2c 3d 73 17 bf 3f d9 41 6f 19 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: b4 a6 13 dc 56 4e 77 bc 0d 8e 22 c7 8f 6d 55 8d 
+#Round	: 200
+#Start	: 2185455
+#End	: 2186096
+#Time Elapsed	:
+641
+#Finalise.
+#Sample 67/100
+#Key	:56 8e fb c6 17 e5 5b 81 7e 99 9d f8 56 2c 3a 94 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 48 d2 02 f5 26 21 09 26 98 e6 cb 52 49 1d ba 3f 
+#Round	: 200
+#Start	: 2218223
+#End	: 2218863
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 68/100
+#Key	:1e 5c f9 33 31 c4 52 a7 e6 7f 56 aa 1f 31 80 ab 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 50 94 3f 6b d4 e6 97 c8 b5 1b 78 37 0b b0 58 12 
+#Round	: 200
+#Start	: 2250991
+#End	: 2251631
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 69/100
+#Key	:4e c8 c6 58 e5 22 c5 6f 53 64 2e 9d 14 81 d8 b9 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 19 f4 a4 c7 8d 56 79 7e aa 08 ce 6d 24 4d 2f 4d 
+#Round	: 200
+#Start	: 2283759
+#End	: 2284400
+#Time Elapsed	:
+641
+#Finalise.
+#Sample 70/100
+#Key	:57 3c 62 9f 68 74 bc 11 f9 6c e0 f0 30 cc f7 f4 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: ac e9 9d 06 e1 50 d4 15 59 d4 2e 3f 5f ef f9 ad 
+#Round	: 200
+#Start	: 2316528
+#End	: 2317168
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 71/100
+#Key	:fb d5 ff 99 89 24 68 04 a0 b8 ce cf 6f 23 0e 59 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: fb cb be 6b eb e9 3a c7 b0 6d 1a 72 eb 6c 8b 0e 
+#Round	: 200
+#Start	: 2349296
+#End	: 2349936
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 72/100
+#Key	:00 1e 41 f2 62 cd 52 c3 10 d5 d4 bd 84 4f 85 57 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 42 ab f4 96 77 8b 4e de ec 7f 61 5b e2 0a 13 3b 
+#Round	: 200
+#Start	: 2382063
+#End	: 2382703
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 73/100
+#Key	:42 b5 b5 64 15 46 1c 1d fc aa b5 e6 66 45 96 6c 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 41 9e 1d 88 ab 79 eb e0 51 73 8d 11 be c8 9c c1 
+#Round	: 200
+#Start	: 2414831
+#End	: 2415471
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 74/100
+#Key	:03 2b a8 ec be 3f f7 fd ad d9 38 f7 d8 8d 0a ad 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 91 24 83 98 48 53 61 af ed 43 19 76 92 92 31 1e 
+#Round	: 200
+#Start	: 2447599
+#End	: 2448240
+#Time Elapsed	:
+641
+#Finalise.
+#Sample 75/100
+#Key	:92 0f 2b 74 f6 6c 96 52 40 9a 21 81 4a 1f 3b b3 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 62 ea a6 89 5d ec 6f ce ec 8a 03 63 d5 3b e5 d0 
+#Round	: 200
+#Start	: 2480368
+#End	: 2481008
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 76/100
+#Key	:f0 e5 8d fd ab 80 f9 9c ac 10 22 e2 9f 24 de 63 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 36 26 26 75 fd bc 1f a5 de 08 0f 3b 25 91 c5 db 
+#Round	: 200
+#Start	: 2513136
+#End	: 2513776
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 77/100
+#Key	:c6 c3 ab 88 56 3c e6 39 72 18 2d d9 ba b5 1b b8 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 7a 3a e9 f2 8e 95 18 5d 9c b2 6c 71 2b b4 e9 25 
+#Round	: 200
+#Start	: 2545903
+#End	: 2546543
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 78/100
+#Key	:bc f9 42 7a d8 a9 fe 64 ee aa 41 a8 91 01 f2 9d 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 9b 3d d1 6c a4 4e 37 2d 75 dd 3b 2f cf 90 22 f4 
+#Round	: 200
+#Start	: 2578671
+#End	: 2579312
+#Time Elapsed	:
+641
+#Finalise.
+#Sample 79/100
+#Key	:27 c4 93 16 7c e7 c9 49 9b 77 7a 87 5e 91 d0 69 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 89 5f a6 b4 a6 65 cf 74 d4 0b 54 d9 f4 1b 31 46 
+#Round	: 200
+#Start	: 2611440
+#End	: 2612080
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 80/100
+#Key	:ae 9b 35 a2 da 82 06 3d 4f 7c 2e 5e aa 8a e1 2f 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 1a 26 c1 e1 9b 2e bb e2 15 e3 77 18 2f e8 5b ef 
+#Round	: 200
+#Start	: 2644208
+#End	: 2644848
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 81/100
+#Key	:b4 bd f4 43 41 ac bd df 5a 9f 59 46 85 62 ba c0 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: c6 6d d2 8f cb 26 40 7a ec dc 5f 7f 99 b4 78 99 
+#Round	: 200
+#Start	: 2676976
+#End	: 2677617
+#Time Elapsed	:
+641
+#Finalise.
+#Sample 82/100
+#Key	:72 d0 26 cc 8a 8a fd a5 b6 43 06 39 1c d6 c2 59 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 8f 10 09 91 96 9a 79 14 86 ee bb 4c 98 4c 01 70 
+#Round	: 200
+#Start	: 2709744
+#End	: 2710384
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 83/100
+#Key	:fd c0 2f 5d 1c 10 84 b1 30 ad bd 75 84 9a c3 29 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: ed 99 6b 48 7f e5 99 97 d6 a0 0f f7 e5 76 f4 f4 
+#Round	: 200
+#Start	: 2742512
+#End	: 2743152
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 84/100
+#Key	:10 59 44 15 63 f5 1d 26 e6 0d b2 82 61 ec 37 dd 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 70 05 90 69 d4 9c 06 b4 81 4b 6c 7c 5c 4c 4f 75 
+#Round	: 200
+#Start	: 2775279
+#End	: 2775920
+#Time Elapsed	:
+641
+#Finalise.
+#Sample 85/100
+#Key	:60 5c d4 7c b7 69 1b 92 67 46 de fe 3d a0 78 a8 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: ba 03 e9 66 08 37 96 bc 31 40 68 1d 9d 27 1a e1 
+#Round	: 200
+#Start	: 2808048
+#End	: 2808688
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 86/100
+#Key	:da 5f 3d 1a bf 5e 8d 2e 56 06 b6 e3 a0 87 62 49 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: e0 b3 8b 4f a2 b8 14 c9 65 36 bb 50 24 8b 63 f7 
+#Round	: 200
+#Start	: 2840815
+#End	: 2841455
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 87/100
+#Key	:3a ec b6 55 1d e6 99 e7 33 30 0d b3 84 0c 01 be 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 52 01 7e 0d 73 f7 4a a5 15 ba bb 00 1f 15 8d a7 
+#Round	: 200
+#Start	: 2873583
+#End	: 2874224
+#Time Elapsed	:
+641
+#Finalise.
+#Sample 88/100
+#Key	:68 ed c8 58 6e 11 d3 42 26 8a b6 b3 9b 19 8c 19 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 9a 28 9f d9 67 48 db da 59 f1 13 42 b9 3d 9f 74 
+#Round	: 200
+#Start	: 2906351
+#End	: 2906991
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 89/100
+#Key	:f2 c5 57 81 09 59 08 98 7f 7b a5 f1 22 24 13 6d 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 36 1f df dc 5a ab 6f be 91 8c 2b 61 38 e5 f9 e6 
+#Round	: 200
+#Start	: 2939119
+#End	: 2939760
+#Time Elapsed	:
+641
+#Finalise.
+#Sample 90/100
+#Key	:c4 da 88 5d 53 f2 67 26 ee f7 8e 90 1a c1 ea 8b 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 33 1f 4c bf dc d6 da 51 2f 47 c8 2c 3c 24 9c 71 
+#Round	: 200
+#Start	: 2971887
+#End	: 2972528
+#Time Elapsed	:
+641
+#Finalise.
+#Sample 91/100
+#Key	:f7 c5 c4 e2 8f 24 bd 77 c1 b0 46 bc 26 e5 76 fa 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: ea 77 5a 51 bc ba 04 76 56 0e 4f 03 3d d1 dc 68 
+#Round	: 200
+#Start	: 3004656
+#End	: 3005296
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 92/100
+#Key	:1d b2 9e b3 33 9e b9 01 97 be 09 bf 1b 34 aa 92 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: d6 43 df f4 42 e4 92 9a 30 e0 b3 bf cb 3c 96 61 
+#Round	: 200
+#Start	: 3037423
+#End	: 3038063
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 93/100
+#Key	:cb f1 41 47 71 7a 2b 9b a7 5e ba 00 d0 08 3c f3 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 62 e0 fb 4c b3 fa 63 1d ba 58 43 a1 dd b2 04 7e 
+#Round	: 200
+#Start	: 3070192
+#End	: 3070832
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 94/100
+#Key	:a9 11 ba 0b c2 80 48 86 1d 06 f9 a1 0d ba 38 8d 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 09 1b a6 64 14 2c 0e 5a 46 4f a1 f3 f3 12 7e 57 
+#Round	: 200
+#Start	: 3102959
+#End	: 3103600
+#Time Elapsed	:
+641
+#Finalise.
+#Sample 95/100
+#Key	:a0 0a 1c 6f d6 ac 46 dc 5b 49 58 52 fe a8 46 da 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 88 61 fa 42 2f e4 d3 8d 5a 1a d9 da f8 41 b8 e7 
+#Round	: 200
+#Start	: 3135729
+#End	: 3136369
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 96/100
+#Key	:28 6b e6 2d f9 48 95 51 01 53 81 88 06 e9 fe 3d 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 48 58 da c4 3c b2 9e e0 9e bc c9 05 d8 8b 00 0e 
+#Round	: 200
+#Start	: 3168495
+#End	: 3169136
+#Time Elapsed	:
+641
+#Finalise.
+#Sample 97/100
+#Key	:60 33 3c e9 c5 fa 0b b1 9f ef 48 8d de 62 fe 33 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 38 e8 a2 28 e4 fa 2d 88 6e 5b b4 d0 e8 6a 07 e9 
+#Round	: 200
+#Start	: 3201263
+#End	: 3201903
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 98/100
+#Key	:58 db 9e c1 21 00 26 39 f1 b4 fc 5d 36 08 f9 da 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: e5 28 f2 67 d1 c1 fb f3 8d e6 e0 72 eb 8c 80 72 
+#Round	: 200
+#Start	: 3234032
+#End	: 3234672
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 99/100
+#Key	:bd f3 6c a6 f0 c1 dd ca 7c 52 1c 2f dd 84 79 a8 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: ce 97 7c 64 c4 08 b3 1d 67 e8 f1 67 2a c3 3a d4 
+#Round	: 200
+#Start	: 3266800
+#End	: 3267440
+#Time Elapsed	:
+640
+#Finalise.
+#Sample 100/100
+#Key	:73 64 10 c2 34 c9 6e d7 1b ba ed 48 f7 47 43 7c 
+#Plaintext	: da 39 a3 ee 54 6b 4b 0d 32 55 bf ef 95 60 18 90 
+#Ciphertext	: 70 d8 84 d5 ba 27 c7 56 f9 6e e5 00 47 fa 78 c1 
+#Round	: 200
+#Start	: 3299572
+#End	: 3300212
+#Time Elapsed	:
+640
+#Finalise.
+#100 tests done for cc2538dk.
