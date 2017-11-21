@@ -1,27 +1,14 @@
-\section{Response Time}
-Response time is another major feature exploited in Internet traffic analysis attack. Again we would expect the same attacks can be applied to 6LoWPAN traffic and works even better than their counterparts against Internet traffic, as the accuracy of timing measurements can be greatly improved for 6LoWPAN traffic. 
 
-Firstly, the devices are physically close to each other and uses RF to communicate. The adversary can remove the RTT noises by measure the packets on the server side. 
+\section{Exploiting Response Time Information\label{sec: ResponseTime}}
 
-Secondly, performance of the constrained devices are low; hence gives a better resolution on timing code execution.
+The response time is another major feature that has been previously exploited in Internet traffic analysis attacks. Like in the case of exploiting packet lengths, we would expect that the same attacks (as in the classical Internet setting) can be applied to 6LoWPAN traffic. Indeed, like in the previous section, we would expect that they will work even better because the accuracy of timing measurements can be greatly improved for 6LoWPAN traffic: this is because there are fewer noise sources in the traffic, the devices are physically close to each other and uses RF to communicate, the adversary can remove the RTT noises by measure the packets on the server side, and the performance of the constrained devices is low and hence gives a better resolution of the execution time.
 
-\subsection{Different Sensors}
-%Plaintext recovery.
-%\begin{itemize}
-%	\item Reading different sensors takes different time.
-%	\item Requirement: needs to identify CoAPS packets.
-%	\item Works on both 802.15.4 Seuciryt and DTLS, if the requirement is met. 
-%\end{itemize}
+\subsection{Distinguishing Different Sensors}
+The first application of timing analysis that we describe is to distinguish between different sensors that are accessed on a device. For this purpose we set up an experiment on a CC2538, which has three on-board sensors: Vdd, temperature, and an Ambient Light Sensor (short ALS). We access these via CoAP\cite{rfc7252}, which is a protocol designed for constrained devices that provides an universal interface for accessing resources. CoAPs is the secure version which stands for CoAP with DTLS.
 
-CoAP\cite{rfc7252} is a protocol designed for constraied devices that provides an universal interface for accessing resources. CoAPs is the secure version which stands for CoAP with DTLS.
+Due to the different physical characteristics of the sensors, there could be a variance of time that is required for reading the measurements. We investigated whether such variances could be observed through the packet response latency. If this was the case, then an adversary could learn the nature/purpose of sensors on a network by observing their response time. 
 
-Due to the different physical characters of sensors, there could be a variance of time when reading the measurements. The idea is to investigate whether such variance can be observed through the packet response latency.
-
-We implemented the experiment on CC2538, using all three sensors from ``cc2538-demo", namely Vdd, temperature and Ambient Light Sensor (ALS). We used CoAP from the ``er-rest-example" in the Contiki OS source code, as there is no CoAPs implementation available. 
-
-Although DTLS processing would definitely have an impact on the response latency, we argue that such impact would be independent to the sensors being accessed; hence similar result would hold even in case of CoAPs.
-
-We have carefully crafted other factors, including URIs, data representation and code flow, to be uniform for all three sensors in order to guarantee a controlled environment.
+We thus set up an experiment on CC2538, using all three sensors from ``cc2538-demo". We used CoAP from the ``er-rest-example" in the Contiki OS source code, as there is no CoAPs implementation available. Although DTLS processing would definitely have an impact on the response latency, we argue that such impact would be independent to the sensors being accessed; hence similar result can be equally expected for CoAPs. We carefully controlled other factors, including URIs, data representation and code flow, to be uniform for all three sensors in order to guarantee a controlled environment.
 
 \begin{table}
 	\center
@@ -29,11 +16,10 @@ We have carefully crafted other factors, including URIs, data representation and
 	\caption{CoAP Response Latency for Sensor Readings on CC2538\label{CoapTiming}}
 \end{table}
 
-\Cref{CoapTiming} summarises the result. It is shown that ALS takes about $2$ms longer and hence can be easily distinguished. Vdd and temperature might be difficult to distinguish by response latency as they have similar results.
+\Cref{CoapTiming} summarises the result. It shows that ALS takes about $2$ms longer and hence can be easily distinguished. Vdd and temperature have much more strongly overlapping distributions, and thus are more difficult to distinguish. Nevertheless these results confirm  our hypothesis: different sensors have different latencies and these leak through the response time. An adversary who is interested in finding out information about devices on a network might thus be able to match the (known) behaviour of `interesting' sensors to what they observe on the network. We remark that this could be useful even in the setting where the sensors transmit their data unencrypted: after all they might return only some reading without a unit of measurement; thus seeing their return data might not as such reveal their nature. 
 
 
-
-\subsection{Different Hardware}
+\subsection{Distinguishing Different Devices}
 %Gain hardware information.
 %\begin{itemize}
 %	\item Different hardware has different response latency against the same message.
@@ -41,7 +27,7 @@ We have carefully crafted other factors, including URIs, data representation and
 %	\item For DTLS: No requirement. The adversary can actively send a message, e.g. PING.
 %\end{itemize}
 
-A more general leakage is the response latency to a specific message, as different processors would have different computational power and thus different time to process a same message. The ICMP messages turns out to be suitable for this attack since they are standardised and thus universally supported. Among the ICMP messages, PING is especially ideal for two reasons: 
+As we observed before, different devices have different underlying hardware and thus different computational power. This implies that there could be the potential that different devices take different amounts of time to process the same message. Because ICMP messages are standardised, they are particularly suitable for this purpose. Among the different ICMP messages, PING is especially ideal for two reasons: 
 \begin{enumerate}
 	\item It is mandatory in the ICMP standard.
 	\item It only swaps the source and destination address of the packet; thus minimises different code path in protocol processing.
@@ -55,7 +41,8 @@ A more general leakage is the response latency to a specific message, as differe
 
 \Cref{PingResponse} shows the PING response latency on CC2538 and TelosB. The result confirms that these devices can be distinguished by PING response latency.
 
-\subsection{Program Fingerprint}
+
+\subsection{Distinguishing Programs}
 %Fingerprints the code running on a device, which leads to plaintext recovery.
 %\begin{itemize}
 %	\item Theory explained in \Cref{FingerprintTheory}.
@@ -63,13 +50,16 @@ A more general leakage is the response latency to a specific message, as differe
 %	\item Not for 802.15.4: adversary can't join the network.
 %	\item For DTLS: PING is available and confirmed. DTLS Heartbeat should work if supported.
 %\end{itemize}
-The program executing on the target is a valuable information in aspect of security and privacy, as it determines functionality of a device and therefore the contents of encrypted packets associated. For instance, knowing a target being an actuator that controls an air conditioner immediately suggests a packet directed to it might  be a controlling command.
 
-Our study shows that the response time of packets could also be exploited to reveal information of the program target is executing. To be more specifically, an adversary can collect ``fingerprints'', which we explain in the following section, from products available on the market and then use this information to breach the program running on a target device.
+We remarked before that the functionality of a sensor is potentially valuable information. For instance some sensors might be predominantly passive, e.g. they might read the temperature and report it back periodically, whereas some sensors might control something upon receiving commands. Thus knowing the functionality enables an adversary to make (more) sense of the observed traffic in the network. This could be done if a `fingerprint' could be produced for different programs. From an adversary's perspective a positive result would imply that they could `fingerprint' products which are on the market and thus use this information to infer what program is running on a target device.
 
-\subsubsection{Hypothesis}
+% program executing on the target is a valuable information in aspect of security and privacy, as it determines functionality of a device and therefore the contents of encrypted packets associated. For instance, knowing a target being an actuator that controls an air conditioner immediately suggests a packet directed to it might  be a controlling command.
+
+%Our study shows that the response time of packets could also be exploited to reveal information of the program target is executing. To be more specifically, an adversary can collect ``fingerprints'', which we explain in the following section, from products available on the market and then use this information to breach the program running on a target device.
+
+
 %How it works
-\Cref{FingerprintTheory} illustrates two sensors receiving a same service request. Sensor Node 1 was idle and hence responded immediately, whilst Sensor Node 2 postponed the request for reading a sensor. From the aspect of packets, the response time on Sensor Node 2 would appear longer than that of Sensor Node 1.
+To illustrate why this might work, we now look at \Cref{FingerprintTheory}. It illustrates two sensors receiving the same service request. In our example, at the time of receiving the request, Sensor Node 1 was idle and hence responded immediately, whilst Sensor Node 2 postponed the request for reading a sensor. Clearly, the response time on Sensor Node 2 would appear longer than that of Sensor Node 1.
 
 \begin{figure}
 	\center
@@ -77,24 +67,17 @@ Our study shows that the response time of packets could also be exploited to rev
 	\caption{Variations in Response Time\label{FingerprintTheory}}
 \end{figure}
 
-Most sensors are programmed in a loop; therefore the same code fragments are repeated through the life time of a sensor. Each code fragment takes different time to execute and hence extends response time differently. 
+In real life, most sensors are programmed in a loop; therefore the same code fragments are repeated through the life time of a sensor. Each code fragment takes different time to execute and hence the response times vary. This behaviour could be statistically analysed and the resulting distribution could be stored as a `fingerprint' .
 
-The code fingerprinting attack exploits this phenomenon by statically analysing the distribution of extended response time to reveal information of the program.
 
-\begin{definition}
-	We refer the distribution of extended response time as a \textbf{``fingerprint''} to the program running on the sensor node.
-\end{definition}
-
-For this attack, we assume the adversary has the pre-knowledge of potential programs, together with a database of all their fingerprints. To identify an unknown program running on target sensor, the adversary collects its fingerprint and then matches it to the database.
-
-To effectively launch the attack, the adversary also needs to be able to send the requests. Further more, requests with short predictable processing time are preferable as they induce less noise. 
+For this fingerprinting scenario, we must assume the adversary has the pre-knowledge of potential programs and can fingerprint them (or that they have access to a database that contains this information). To identify an unknown program running on target sensor, the adversary collects a new fingerprint and then matches it to available fingerprints. Clearly, to effectively launch the attack, the adversary needs to be able to send the request to a targeted sensor (requests with short predictable processing time are preferable as they induce less noise). 
 
 In practice, the request can be instantiated by several messages defined in the sensor network protocols. PING is exceptionally ideal as it is mandatory in the ICMP standard\cite{rfc4433} and has only negligible computation. Other options but not excluded are Heartbeat in DTLS\cite{rfc6520}, Reset in CoAP\cite{rfc7252}, etc.
 
-\subsubsection{Extracting Fingerprint}
-The first task of the attack is to construct a fingerprint of a program. We experimented with PING on CC2538 running Contiki OS. 
+\subsubsection{Extracting Fingerprints}
+We explored the feasibility of fingerprinting programs on an CC2538 running Contiki OS by using the PING command.
 
-\Cref{ExamplePri} shows an example of captured packets. Contiki MAC\cite{ContikiMAC} sends duplicated PING requests. The response time, refers to PING Response Interval, PRI, is defined to be the time between a PING response and its last paired request. The highlighted Packet 205 and Packet 203 shows such an example.
+\Cref{ExamplePri} shows an example of captured packets. Contiki MAC\cite{ContikiMAC} sends duplicated PING requests. The response time, which refers to PING Response Interval, PRI, is defined to be the time between a PING response and its last paired request. The highlighted Packets 205 and 203 shows such an example.
 
 \begin{figure}[!h]
 	\centering
@@ -119,42 +102,28 @@ The first task of the attack is to construct a fingerprint of a program. We expe
 	\caption{helloworld PRIs\label{HelloworldPri}}
 \end{figure}
 
-We further plotted the upper outliers, mostly ranged [12, 2000]ms, in \Cref{HelloworldPriOutliers}. We suppose these outliers corresponds to the extended response time as depicted by Sensor Node 2 in \Cref{FingerprintTheory}. According to the hypothesis, the distribution described by \Cref{HelloworldPriOutliers} is the fingerprint of the ``helloworld'' example.
+We further plotted the upper outliers, mostly ranged [12, 2000]ms, in \Cref{HelloworldPriOutliers}. Unfortunately we do not have a solution to investigate the exact cause of such delay, as we were unable to control the code execution that requires environmental interaction within a timing critical context. Nevertheless, we suppose these outliers correspond to the extended response time as depicted by Sensor Node 2 in \Cref{FingerprintTheory}. The distribution described by \Cref{HelloworldPriOutliers} is the fingerprint of the ``helloworld'' example.
 
-The result in \Cref{HelloworldPri} showed a clear gap between the usual PRIs and extended PRIs. In fact other applications we experimented also showed the same property. This implies that an adversary can easily draw a threshold by observing the whole PRI distribution and then filters the fingerprint. In our experiments the threshold is set to 12ms but any other values within the gap would also work. 
+The result in \Cref{HelloworldPri} shows a clear gap between the usual PRIs and extended PRIs. In fact other applications we experimented also showed the same property. This implies that an adversary can easily draw a threshold by observing the whole PRI distribution and then filter out the fingerprint. In our experiments the threshold is set to 12ms but any other values within the gap would also work. 
 
-\subsubsection{Fingerprint Matching}
-%Comparing the distribution.
 We collected the fingerprints for three programs taken from the Contiki OS examples:
 \begin{description}
-	\item[broadcast] This is taken as it is from the example which periodically broadcasts a constant message.
-	 
-	\item[powertrace] This is taken as it is from the example which records the power consumption and broadcasts a constant message.
+	\item[broadcast] This program periodically broadcasts a constant message.
 	
-	\item[Sensorpayload] This program is based on the ``er-rest-example'' embedded together with sensor accesses taken from ``cc2538-demo''. It captures a real case scenario where three different sensors, namely Temperature, VDD and ALS, are being access through CoAP.
+	\item[powertrace] This program records the power consumption and broadcasts a constant message.
+	
+	\item[Sensorpayload] This program is based on the ``er-rest-example'' embedded together with sensor accesses taken from ``cc2538-demo''. It captures a real case scenario where three different sensors, namely Temperature, Vdd and ALS, are being accessed through CoAP.
 \end{description}
 
 Specifically for ``Sensorpayload'' we collected fingerprints for 8 different scenarios where different sensors are being accessed. For each program we independently collected 2 fingerprints for comparison.
 
 \Cref{FingerprintApps} summarises the total 20 fingerprints we collected for the experiment.
 
-During the experiments we realised that most of the fingerprints does not subject to any common distributions as expected; therefore we used Kolmogorov-Smirnov Distance as the statistics. \Cref{ksdistances} summarises the relative KS distances computed on each pair of fingerprints in our experiments.
+\subsubsection{Fingerprint Matching}
+%Comparing the distribution.
 
-Although fingerprints collected on the same application basically failed to pass the Kolmogorov-Smirnov Test, we realised that their KS distance tends to be smaller comparing to fingerprints collected on different programs, as the \textbf{bold} cells marked in \Cref{ksdistances}. 
+During the experiments we realised that most of the fingerprints do not adhere to common distributions; therefore we used a non parametric test, the Kolmogorov-Smirnov Distance\cite{KsTest}, as our test statistic. This is a well understood statistic with previous uses in side channel analysis\cite{KsDistanceDistinguisher}. \Cref{ksdistances} summarises the relative KS distances computed on each pair of fingerprints in our experiments.
 
-By matching fingerprints with the minimum KS distance, 13 out of 20 fingerprints in our experiments have successfully matched the paired one collected on the same program, which suggests a much better result than random matching.
+Although fingerprints collected on the same application were rejected by the Kolmogorov-Smirnov Test, we noticed that their KS distance tends to be smaller comparing to fingerprints collected on different programs, as the \textbf{bold} cells marked in \Cref{ksdistances}. 
 
-Further more the mismatch only occur among the ``Sensorpayload'' program and fingerprints collected on the same program still tends to have relatively low KS distances. Considering they share most of the code except a slight difference in reading different sensors, the KS distances of fingerprints might also be suggested as a support measurement of similarity of different programs.
-
-\subsection{Countermeasure}
-%Two options:
-%\begin{itemize}
-%	\item Randomise response time: needs to be resilient to statistical analysis.
-%	\item Threashold response time (discard or reply in a constant time): performance tradeoff. Recommended for unreliable transmissions.
-%\end{itemize}
-Timing countermeasures are relatively hard to be implemented due to hardware restrictions. There are two common countermeasures considered:
-\begin{itemize}
-	\item Randomly delay the response. However, the randomness must be carefully chosen to be statistically resilient which indicates potential computational overhead.
-	 
-	\item Use threshold response time, i.e. a request is either responded at a predefined time or not responded at all. This method is recommended as most 6LoWPAN application would tolerate missing packets and timer is available on most platforms. However, the threshold must be carefully chosen to preserve the functionality of the 6LoWPAN application.
-\end{itemize}
+By adapting our distinguisher to utilise the minimum KS distance, we were able to identify 13 out of 20 fingerprints successfully. The `overlapping' fingerprints are mainly due to the ``Sensorpayload'' program, which access different sensors, but otherwise has identical program code. Thus we did expect that the different instantiations of it would lead to very similar fingerprints. 

@@ -1,45 +1,40 @@
-\documentclass{article}
-%\documentclass{river-journal}
-%\usepackage{rivps}
-%\usepackage[mtbold]{mathtime}
+\documentclass{river-journal}
+\usepackage{rivps}
+%\usepackage[mtbold]{mathtime} %Unable to find a compilable one...
 
 \usepackage{graphicx}
 \usepackage{graphics}
-%\usepackage{subfigure}
+\usepackage{subfigure}
 \usepackage{cite}
-\usepackage{url}
-\usepackage{subcaption}
-\usepackage{multirow}
 
+%\usepackage{url}
+%\usepackage{subcaption}
+%\usepackage{multirow}
 \input{packages}
 
 % for alternatives, see appendix of manual
 
-%\newtheorem{guess}{Conjecture}
+\newtheorem{guess}{Conjecture}
 
 % bibliographies
 \bibliographystyle{plain}
 % also tested with natbib
 
-\title{Exploring Potential 6LoWPAN Traffic Side Channels}
-\author{Yan Yan \and Elisabeth Oswald \and Theo Tryfonas}
+\raggedbottom
+\sloppy\par
+
+%\title{Exploring Potential 6LoWPAN Traffic Side Channels}
+%\author{Yan Yan \and Elisabeth Oswald \and Theo Tryfonas}
 
 \begin{document}
-\maketitle
-%\begin{opening}
-%\institute{
-{
-	\centering 
-	University of Bristol, \\
-	\texttt{
-		\{y.yan elisabeth.oswald theo.tryfonas\}@bristol.ac.uk
-	}
-}
-%}
-%\end{opening}
+\begin{opening}
+	\title{Exploring Potential 6LoWPAN Traffic Side Channels}
+	\author{Yan Yan, Elisabeth Oswald, Theo Tryfonas}
+	\institute{University of Bristol,  \texttt{\{y.yan elisabeth.oswald theo.tryfonas\}@bristol.ac.uk}}
+\end{opening}
 
-%\runningtitle{Exploring Potential 6LoWPAN Traffic Side Channels}
-%\runningauthor{Y. Yan}
+\runningtitle{Exploring Potential 6LoWPAN Traffic Side Channels}
+\runningauthor{Y. Yan, E. Oswald, T. Tryfonas}
 
 \subsection*{Abstract}
 The Internet of Things (IoT) has become a reality: small connected devices feature in everyday objects
@@ -47,7 +42,7 @@ including childrens' toys, TVs, fridges, heating control units, etc. Supply chai
 throughout, and significant investments go into researching next-generation healthcare, 
 where sensors monitor wellbeing. A future in which sensors and other (small) devices interact to create sophisticated applications seems just around the corner. All of these applications have a fundamental need for security and privacy and thus cryptography is deployed as part of an attempt to secure them. In this paper we explore a particular type of flaw, namely side channel information, on the protocol level that can exist despite the use of cryptography. Our research investigates the potential for utilising packet length and timing information (both are easily obtained) to extract interesting information from a system. We find that using these side channels we can distinguish between devices, different programs running on the same device including which sensor is accessed. We also find it is possible to distinguish between different types of ICMP messages despite the use of encryption. Based on our findings, we provide a set of recommendations to efficiently mitigate these side channels in the IoT context. 
 
-%\keywords{6LoWPAN, Side Channels, Traffic Analysis}
+\keywords{6LoWPAN, Side Channels, Traffic Analysis}
 
 \section{Introduction}
 The expression `Internet of Things' (IoT) can refer to a multitude of objects and protocols, which share that they have been purposefully designed for resource constraint environments. Whereas the typical TCP/IP network stack produces considerable overhead to achieve quality of service for applications that are based on it, the nature of many IoT `things' is such that a full implementation of it would not be practical. Often `things' are sensor, which are devices that have to function on little resources (most importantly power). Thus a whole host of new networking protocols have been developed over the years to cater for such resource constrained devices: 6LoWPAN is the `tiny' version of IPv6, UDP tends to be used instead of TCP/IP, DTLS can be used for end-to-end security or one can directly invoke 802.15.4 security which is part of 6LoWPAN, and finally CoAP(s) is the replacement for HTTP(s). Thus there are two options (802.15.4, and DTLS) to secure communications between the `things' and a server/gateway. 
@@ -80,7 +75,7 @@ In this paper we focus on 6LoWPAN\cite{rfc4944} which is based on the 802.15.4\c
 %6LoWPAN OS
 6LoWPAN thus is the most popular standard for low power networks, and thus it is supported by several competing IoT Operating Systems, including Contiki OS\cite{Contiki}, OpenWSN\cite{OpenWSN}, FreeRTOS\cite{FreeRTOS} and the recent RIOT\cite{RIOT}. We chose Contiki OS for our experiments because it is easy to customise.
 
-\subsection{Our experimental network}
+\subsection{Our Experimental Network}
 %Say something about devices, and choice of OS, etc.
 %Hardware
 Our experimental network is constructed using two different devices. These are a TelosB\cite{TelosB} and a CC2538\cite{CC2538}. The TelosB is a low cost sensor powered by an MSP430 with an AES co-processor. It represents typical low-end devices. The CC2538 is the high end device powered by an ARM Cortex-M3 with multiple cryptographic processors including AES, RSA, SHA-2 and ECC, suggesting that it is suitable to develop secure applications. %Should I cite our previous paper...?
@@ -88,8 +83,9 @@ Our experimental network is constructed using two different devices. These are a
 %Software
 Both devices are supported by the Contiki OS. We adopted the default settings of the Contiki OS, except for enabling 802.15.4 security\cite{802154} for some experiments. Note that the Contiki MAC\cite{ContikiMAC} is chosen by default over TSCH\cite{TSCH}. For Layer 4\cite{OSI} and above protocols, we went with the widely accepted combination of CoAP\cite{rfc7252}, and DTLS\cite{rfc6347}(optional) over UDP\cite{rfc768}\footnote{CoAPs is equivalent to CoAP over DTLS.}. \Cref{Protocols} summarises our choice of protocol stack.
 
-\begin{table}[!h]
+\begin{table}
 	\centering
+	\caption{Protocol stack for our experiments(* is optinal)\label{Protocols}}
 	\begin{tabular}{|c|c|}
 	\hline
 	Physical                        & \multirow{2}{*}{802.15.4} \\ \cline{1-1}
@@ -99,8 +95,6 @@ Both devices are supported by the Contiki OS. We adopted the default settings of
 	                              & DTLS*                     \\ \hline
 	Application                   & CoAP / CoAPs*             \\ \hline
 	\end{tabular}
-
-	\caption{Protocol stack for our experiments(* is optinal)\label{Protocols}}
 \end{table}
 
 %\begin{itemize}
@@ -141,8 +135,8 @@ Generally, ICMP messages can be protected by either using the secure ICMP messag
 
 \begin{table}
 	\center
-	\input{tbl/icmpmeta.tex}
 	\caption{6LoWPAN Packet Features\label{IcmpPacketFeature}}
+	\input{tbl/icmpmeta.tex}
 \end{table}
 
 %First of all, a DIS has the unique smallest packet size of 85 bytes, indicating it can be easily identified.
@@ -181,8 +175,8 @@ We thus set up an experiment on CC2538, using all three sensors from ``cc2538-de
 
 \begin{table}
 	\center
-	\input{tbl/coapsensors.tex}
 	\caption{CoAP Response Latency for Sensor Readings on CC2538\label{CoapTiming}}
+	\input{tbl/coapsensors.tex}
 \end{table}
 
 \Cref{CoapTiming} summarises the result. It shows that ALS takes about $2$ms longer and hence can be easily distinguished. Vdd and temperature have much more strongly overlapping distributions, and thus are more difficult to distinguish. Nevertheless these results confirm  our hypothesis: different sensors have different latencies and these leak through the response time. An adversary who is interested in finding out information about devices on a network might thus be able to match the (known) behaviour of `interesting' sensors to what they observe on the network. We remark that this could be useful even in the setting where the sensors transmit their data unencrypted: after all they might return only some reading without a unit of measurement; thus seeing their return data might not as such reveal their nature. 
@@ -203,9 +197,9 @@ As we observed before, different devices have different underlying hardware and 
 \end{enumerate}
 
 \begin{table}
-	\center
-	\input{tbl/pingresponse}
+	\centering
 	\caption{PING Response Latency\label{PingResponse}}
+	\input{tbl/pingresponse}
 \end{table}
 
 \Cref{PingResponse} shows the PING response latency on CC2538 and TelosB. The result confirms that these devices can be distinguished by PING response latency.
@@ -232,8 +226,8 @@ To illustrate why this might work, we now look at \Cref{FingerprintTheory}. It i
 
 \begin{figure}
 	\center
-	\includegraphics[width=\textwidth]{fig/PingProbe_Theory.png}
 	\caption{Variations in Response Time\label{FingerprintTheory}}
+	\centerline{\includegraphics[width=\textwidth]{fig/PingProbe_Theory.png}}
 \end{figure}
 
 In real life, most sensors are programmed in a loop; therefore the same code fragments are repeated through the life time of a sensor. Each code fragment takes different time to execute and hence the response times vary. This behaviour could be statistically analysed and the resulting distribution could be stored as a `fingerprint' .
@@ -248,26 +242,43 @@ We explored the feasibility of fingerprinting programs on an CC2538 running Cont
 
 \Cref{ExamplePri} shows an example of captured packets. Contiki MAC\cite{ContikiMAC} sends duplicated PING requests. The response time, which refers to PING Response Interval, PRI, is defined to be the time between a PING response and its last paired request. The highlighted Packets 205 and 203 shows such an example.
 
-\begin{figure}[!h]
+\begin{figure}
 	\centering
-	\includegraphics[width=\textwidth]{fig/PRI_hl.png}
 	\caption{Example PRI\label{ExamplePri}}
+	\centerline{\includegraphics[width=\textwidth]{fig/PRI_hl.png}}
 \end{figure}
 
 %Since the attack extracts the information contained in the extended response time of a specific request, the first problem is to see whether such extended response time can be filtered from normal ones. 
 
 \Cref{HelloworldPriNormal} shows the histogram of PRIs collected on the ``helloworld'' example from Contiki OS. Values $\geq$12ms are collected at 12ms. The result shows that most PRIs are clustered around 9.5ms which consists with our result in \Cref{PingResponse}. The majority, roughly ranged [9.0, 10.3]ms, corresponds to the usual response time as depicted by Sensor Node 1 in \Cref{FingerprintTheory}. 
 
-\begin{figure}[!h]
+%\begin{figure}
+%	\centering
+%	\begin{subfigure}{width=0.45\textwidth}
+%		\includegraphics[width=\textwidth]{fig/helloworld_cc2538.png}
+%		\caption{PRIs of helloworld\label{HelloworldPriNormal}}
+%	\end{subfigure}
+%	\begin{subfigure}{0.45\textwidth}
+%		\includegraphics[width=\textwidth]{fig/helloworld_cc2538_outlier.png}
+%		\caption{PRIs outliers of helloworld\label{HelloworldPriOutliers}}
+%	\end{subfigure}
+%	\caption{helloworld PRIs\label{HelloworldPri}}
+%\end{figure}
+
+\begin{figure}
 	\centering
-	\begin{subfigure}{0.45\textwidth}
-		\includegraphics[width=\textwidth]{fig/helloworld_cc2538.png}
-		\caption{PRIs of helloworld\label{HelloworldPriNormal}}
-	\end{subfigure}
-	\begin{subfigure}{0.45\textwidth}
-		\includegraphics[width=\textwidth]{fig/helloworld_cc2538_outlier.png}
-		\caption{PRIs outliers of helloworld\label{HelloworldPriOutliers}}
-	\end{subfigure}
+	\subfigure[PRIs of helloworld\label{HelloworldPriNormal}]
+	{
+		\includegraphics[width=0.45\textwidth]{fig/helloworld_cc2538.png}
+	}
+	\subfigure[PRIs outliers of helloworld\label{HelloworldPriOutliers}]
+	{
+		\includegraphics[width=0.45\textwidth]{fig/helloworld_cc2538_outlier.png}
+	}
+%	\begin{subfigure}{0.45\textwidth}
+%		\includegraphics[width=\textwidth]{fig/helloworld_cc2538_outlier.png}
+%		\caption{PRIs outliers of helloworld\label{HelloworldPriOutliers}}
+%	\end{subfigure}
 	\caption{helloworld PRIs\label{HelloworldPri}}
 \end{figure}
 
@@ -327,11 +338,7 @@ In order to mitigate the leakage given by response times, the natural countermea
 Within the context of 6LoWPAN the second method is recommended as most 6LoWPAN application would tolerate missing packets and timer is available on most platforms. However, the threshold must be carefully chosen to preserve the functionality of the 6LoWPAN application.
 
 
-
-
-
 \appendix
-\input{appendix}
 %And this is my Appendix.
 
 %\subsection*{Appendix Subsection}
@@ -339,6 +346,28 @@ Within the context of 6LoWPAN the second method is recommended as most 6LoWPAN a
 %Some text.
 
 %\nocite{*} % add all entries from sample.bib
+
+\subsection*{Fingerprint Experiment Programs}
+\FloatBarrier
+\begin{table}
+	\centering
+	\caption{Fingerprint Experiment Programs \label{FingerprintApps}}
+	\input{tbl/PingProbeExperiments.tex}
+\end{table}
+\FloatBarrier
+
+\subsection*{Fingerprint Experiment Relative KS-Distances}
+\FloatBarrier
+\begin{sidewaystable}
+	%\footnotesize
+	\centering
+	\caption{
+		Relative KS-Distances of Experimented Fingerprints (Multiplied by 100 for readability. Indexes refer to \Cref{FingerprintApps} 
+		Minimum in each row marked as \textbf{bold}.) \label{ksdistances}
+	}
+	\input{tbl/ksdistance.tex}
+\end{sidewaystable}
+\FloatBarrier
 
 \bibliography{references,rfc}
 %\begin{thebibliography}{10}

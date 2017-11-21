@@ -1,4 +1,29 @@
-\section{Conclusion}
-{\it
-Conclude.
-}
+\section{Conclusion\label{sec: Conclusion}}
+
+In this paper we explore, for the first time, the use of packet lengths and response times, which are protocol level side channels, as means to recover information about IoT `things'. We do this experimentally, which we base on two extremely popular devices running on a popular open source OS, with a typical stack of protocols. Whilst we do not cover a wide range of devices, the fact that two of the most popular devices show the characteristics that we hypothesise, gives credibility to our results. Our results show that it is possible (in principle) to recover information about a device and its function (i.e. the hardware and the software that runs on it) via inspecting encrypted traffic that it produces. We also point out that ICMP messages can be distinguished from each other despite the use of encryption. 
+
+In order to mitigate the leakage that is given by packet lengths, previous works recommend padding \cite{Peekaboo}. We echo this recommendation. Whilst padding to MTU is considered inefficient for the Internet, it is in fact highly appropriate for 6LoWPAN because:
+\begin{itemize}
+	\item It completely hides the length of original plaintext.
+	\item 6LoWPAN has only a low MTU of 127 bytes; therefore the overhead is acceptable.
+	\item It induces negligible computational overhead.
+\end{itemize}
+
+%Resourceful applications can enhance the countermeasure by inserting dummy packets.
+
+With regard to the leaking information about the device or OS, we suggest strictly applying the standard MTU to eliminate the differences in drivers. Although there is a potential of performance downgrade, it will also improve the compatibility among different devices.
+
+
+%Two options:
+%\begin{itemize}
+%	\item Randomise response time: needs to be resilient to statistical analysis.
+%	\item Threashold response time (discard or reply in a constant time): performance tradeoff. Recommended for unreliable transmissions.
+%\end{itemize}
+In order to mitigate the leakage given by response times, the natural countermeasure is to write time-constant code, which is known to be notoriously difficult. But two approaches are available to a software developer:
+\begin{itemize}
+	\item Randomly delay the response. This essentially adds noise to the measurements of the adversary.
+	
+	\item Use a threshold response time, i.e. a request is either responded at a predefined time or not responded at all. 
+\end{itemize}
+Within the context of 6LoWPAN the second method is recommended as most 6LoWPAN application would tolerate missing packets and timer is available on most platforms. However, the threshold must be carefully chosen to preserve the functionality of the 6LoWPAN application.
+

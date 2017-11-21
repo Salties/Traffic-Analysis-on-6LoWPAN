@@ -1,20 +1,14 @@
-\section{Packet Length}
+\section{Exploiting Packet Length Information\label{sec: PacketLen}}
 
+As our brief survey of traffic analysis via exploiting packet lengths showed in \Cref{subsec: RelatedWork}, the packet length has proven to be a powerful side channel for the classical Internet protocols. It is worth noting that this side channel is `noisy' in the classical Internet setting: websites or web applications in this setting typically feature advertisements, which impact on packet lengths; TCP/IP allows to fragment packets and then reassembles them, a feature which is not presented in UDP. Thus, due to the nature of UDP exploiting the packet length as side channel should be easier in the IoT setting.
 
-Packet length is proven to be a major leakage source in Internet traffic analysis attacks. Since neither 802.15.4 Security nor DTLS protects packet length, we expect the same attacks would apply to 6LoWPAN traffic as well. Further more, we suppose 6LoWPAN applications are even more vulnerable to the leakage as there tends to be less noise in the traffic.
+Clearly then, any web application style implementations involving an IoT device will thus be extremely vulnerable to attacks such as \cite{WebSidechannel}. In the absence of this scenario for state-of-the art IoT applications, it still sends a cautionary warning to developers: binary responses (e.g. `yes' vs. `no', or `on' vs. `off') must always be coded via a binary variable and not via strings because these will have different lengths, which are directly visible via the packet length.
 
-Unreliable transmission is more preferable for 6LoWPAN applications for its low cost. Take UDP, the symbolic protocol for unreliable transmission, for example. UDP has no flow control; therefore packet size as well as number of packets are deterministic given the same application data. This effectively removed the natural noise induced by TCP packet reassembling. Although packet fragmentation is also provided by IPv6 but this feature is usually disabled for practical reasons.
+In the remainder of this section we will highlight further problems that arise if packet lengths leak information.
 
-``Random" data, such as ads, is another major noise in Internet traffic which does not exist in 6LoWPAN traffic. The random data naturally randomises the traffic and hence complicates traffic analysis attacks. The leakage would be more easily observed without these noise.
-\subsection{ICMP Leakage}
-%Plaintext recovery.
-%\begin{itemize}
-%	\item The attack combines packet length with MAC address information.
-%	\item Works on 802.15.4 Security. No need for DTLS (ICMP is plaintext when DTLS.)
-%\end{itemize}
+\subsection{Distinguishing ICMP Messages}
+The Internet Control Message Protocol(ICMP)\cite{rfc4443} performs the management tasks in a network, such as link establishment and routing information exchange. As explained before we utilise the open source system Contiki, which supports a (sub)set of the ICMP standard (we list the supported ICMP messages further below). Many ICMP messages are ideal for network discovery and exploration, although the purpose of ICMP is to send error messages to the source IP address if standard IP packets fail to be transmitted correctly. 
 
-
-Internet Control Message Protocol(ICMP)\cite{rfc4443} performs the management tasks in the network, such as link establishment and routing information exchange. Contiki OS supports the following ICMP messages:
 
 \begin{itemize}
 	\item \textbf{DAG Information Object (DIO)} \\
@@ -22,22 +16,14 @@ Internet Control Message Protocol(ICMP)\cite{rfc4443} performs the management ta
 	\item \textbf{DAG Information Solicitation (DIS)} \\
 	DIS is sent by a newly started node to probe any existing 6LoWPANs. A DIO would be replied if the DIS is received by any neighbour nodes.
 	\item \textbf{Destination Advertisement Object (DAO)} \\
-	DAO is sent by a child node to its precedents\footnote{The 6LoWPAN DODAG topology is defined in \cite{rfc6550}.} to propagate its routing information.
+	DAO is sent by a child node to its precedents (The 6LoWPAN DODAG topology is defined in \cite{rfc6550}) to propagate its routing information.
 	\item \textbf{Neighbour Solicitation (NS) and Neighbour Advertisement (NA)} \\
 	NS and NA are the ARP replacement in IPv6, where NS queries a translation and NA answers one. In addition, they are also used for local link validity check.
 	\item \textbf{Echo Request and Echo Response (PING)} \\
 	Echo Request and Echo Response are well known as the PING packets. They are mostly used for diagnostic purposes, such as connectivity test or Round Trip Time (RTT) estimation. Echo Request may contain arbitrary user defined data and Echo Response simply echoes its corresponding request.
 \end{itemize}
 
-Generally, ICMP messages can be protected by either using the secure ICMP messages, or relying on lower layer encryption. Since Contiki OS does not have the former implemented, 802.15.4 Security became the only option currently.
-
-Although leakage in ICMP messages does not directly lead to any breach of application data, it would still be harmful by providing the adversary with information including network topology. These informations could then be exploited to, say, identify critical targets of DoS attacks. 
-
-We simulated a 6LoWPAN network with 802.15.4 Security enabled\footnote{Security level is set to the highest 0x07.}. The nodes are configured to also generate random UDP packets. 
-
-Despite the ICMP messages are encrypted by 802.15.4 Security, our experiment shows that several ICMP messages can still be identified by the packet size and MAC destination. 
-
-\Cref{IcmpPacketFeature} summarises the packet features. $x$ to denotes the size of user defined data in bytes.
+Generally, ICMP messages can be protected by either using the secure ICMP messages as described in \cite{rfc4443}, or relying on the lower layer encryption provided by 802.15.4. Contiki OS does not have the former implemented, hence 802.15.4 security is the only option currently. We simulated a 6LoWPAN network with 802.15.4 security enabled (with strongest encryption and authentication). We configured the nodes to also generate random UDP packets. Despite the fact that all ICMP messages were encrypted, our experiments show that several ICMP messages can be identified by their packet size and MAC destination. \Cref{IcmpPacketFeature} summarises the packet features. The value $x$ denotes the size of user defined data in bytes.
 
 \begin{table}
 	\center
@@ -47,40 +33,22 @@ Despite the ICMP messages are encrypted by 802.15.4 Security, our experiment sho
 
 %First of all, a DIS has the unique smallest packet size of 85 bytes, indicating it can be easily identified.
 
-Among the unicast packets, since PING and UDP have at least 101 and 108 bytes\footnote{PING can be sent without user defined data and UDP packets requires at least 1 byte.}, DAO can therefore uniquely identified as unicast packets of $97$ bytes. 
+Among the unicast packets, PING and UDP have at least 101 and 108 bytes\footnote{PING can be sent without user defined data and UDP packets requires at least 1 byte.}. Therefore, DAO can be uniquely identified as the shorter unicast packet of $97$ bytes.  For the same reason NA and unicast NS can also be distinguished from other packets by filtering packets of $87$ bytes. Considering that NA is sent as a response to NS according to the protocol, one can always identify the first being NS and second being NA. 
 
-For the same reason NA and unicast NS can also be distinguished from other packets by filtering packets of $87$ bytes. Considering NA is sent as a response to NS according to the protocol, one can always identify the first being NS and second NA. 
+Similarly, unicast DIO can be identified as the 123 bytes packet followed by DIS, where the later has a unique 85 byte size. However, there is a potential of false positive induced by PING or UDP packets with user defined data crafted to have the same packet length\footnote{22 bytes for PING and 16 bytes for UDP.}. PING could be recognised by its pair-wised appearance, as the response would have nearly the same meta data as the original request, except the exchanged source and destination. For broadcast packets, DIS can be easily identified by its unique 85 bytes packet size. Others like broadcast NS can be identified by the followed characteristic NA response; and packets of 118 bytes those are periodically broadcasted are likely to be DIOs.
 
-Similarly, unicast DIO can be identified as the 123 bytes packet followed by DIS, where the later has a unique 85 bytes size. However, there is a potential of false positive induced by carefully crafted PING or UDP packets.
+In summary, among all the packets, DAO, NA, NS, DIS can be identified with certainty. DIO and PING cannot be certainly identified but they both have significant characters. Notice that the above contained all ICMPv6 messages supported by Contiki; therefore UDP packets can be reversely filtered, although in some cases they get mixed with DIO and PING.
 
-PING could be recognised by its pair-wised appearance, as the response would have nearly the same meta data as the original request, except the exchanged source and destination.
+Although leakage in ICMP messages does not directly lead to any breach of application data, it would still be harmful by providing the adversary with information about the state of the network, including which nodes recently joined etc. Specifically DAO is always sent from a child to its parent and can be uniquely identified; therefore together with MAC addresses the adversary may exploit it to draw a graph that shows the parental relations in the network. In addition, these information can also be exploited by attacks as in \cite{WsnIcmp}.
 
-For broadcast packets, DIS can be easily identified by its unique 85 bytes packet size. Others like broadcast NS can be identified by the followed characteristic NA response; and packets of 118 bytes those are periodically broadcasted are likely to be DIOs.
-
-In summary, among all the packets, DAO, NA, NS, DIS can be identified with certain. DIO and PING cannot be certainly identified by they both have significant characters. Notice that the above contained all ICMPv6 messages supported; therefore UDP packets can be reversely filtered, although in some cases mixed with DIO and PING.
-
-
-\subsection{Hardware Leakage}
+%\textbf{
+%TODO: why would you get the network topology (do you mean via observing the different MAC addresses alongside what they send out)? AFter all the payload is still encrypted and so you don't see the actual DAO for instance??
+%}
+\subsection{Distinguishing Different Devices}
 %Gain hardware information.
 %\begin{itemize}
 %	\item Some devices can handle longer packets, some can't.
 %	\item Works on both 802.15.4 Security and DTLS.
 %\end{itemize}
-Sometimes the packet length could also leak hardware information, mostly due to hardware limitations or different drivers. For instance, TelosB\cite{TelosB} discards all packets exceeding 127 bytes\footnote{MTU specified by 802.15.4 standard.} whereas CC2538 handles packets even up to 160 bytes. Therefore an adversary can immediately rule out TelosB whenever a packet larger than 127 bytes processed by the target.
 
-\subsection{Countermeasure}
-%{\it
-%Pad to MTU is recommended as it completely hides the length of plaintext. This method only induces slight overhead as 6LoWPAN MTU is small and requires only negligible computation.
-%
-%Unifying the drivers by strictly apply the standard MTU. Applications should be compatible to the standard anyway. 
-%}
-A general countermeasure to packet length leakage is padding, as studied in \cite{Peekaboo}. Although Padding to MTU is considered inefficient for Internet, it is recommended for 6LoWPAN as:
-\begin{itemize}
-	\item It completely hides the length of original plaintext.
-	\item 6LoWPAN has only a low MTU of 127 bytes; therefore the overhead is relatively acceptable.
-	\item It induces negligible computational overhead.
-\end{itemize}
-
-%Resourceful applications can enhance the countermeasure by inserting dummy packets.
-
-With regard to the hardware leakage, we suggest strictly applying the standard MTU to eliminate the differences in drivers. Although there is a potential of performance downgrade, but it will also improve the compatibility Samong different devices.
+In the classical Internet world, ICMP has been well known for its use for OS fingerprinting\cite{OsFingerprint}. In the case of the IoT, this could be possible as well (as different OS support different subsets of ICMP), however an additional attack vector exists. This is because different IoT devices have different hardware limitations or drivers. We noticed that our TelosB\cite{TelosB} discards all packets exceeding 127 bytes\footnote{MTU specified by 802.15.4 standard.} whereas our CC2538 handles packets even up to 160 bytes. Therefore an adversary can immediately rule out TelosB whenever a packet larger than 127 bytes processed by the target.
